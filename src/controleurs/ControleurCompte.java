@@ -150,7 +150,7 @@ public class ControleurCompte{
 
 
                     //Cas spécial recette Picon.. TODO
-                    MainApp.getControleurStocks().majDonnees();
+                    MainApp.controleurStocks.majDonnees();
                 }
                 catch (SQLException e) {
                     e.printStackTrace();
@@ -429,7 +429,7 @@ public class ControleurCompte{
             // Si quantite != 0 alors on modifie la quantite, sinon on fait bien le demanderVente...
         }
 
-        MainApp.getControleurDialogVenteCompte().demanderVenteUtilisateur((Stage) retour.getScene().getWindow(), consommable);
+        MainApp.controleurDialogVenteCompte.demanderVenteUtilisateur((Stage) retour.getScene().getWindow(), consommable);
     }
 
     //TODO DataBase.compte_acheter(idCompte, consommable.getNom(), quantite, date, 0); 0 A METTRE EN VARIABLE (gratuit)
@@ -440,7 +440,7 @@ public class ControleurCompte{
             pileActions.add(new ActionCompte(ActionCompte.Actions.VENTE, consommable, date, quantite, gratuit));
 
             majDataTable();
-            MainApp.getControleurStocks().majDonnees();
+            MainApp.controleurStocks.majDonnees();
         }
         catch (SQLException exceptionStock) {
             showAlerte(Alert.AlertType.WARNING, "Plus assez de stock", exceptionStock.getMessage().split("\n")[0].split("20001:")[1]);
@@ -507,9 +507,7 @@ public class ControleurCompte{
     @FXML
     private void retourArriere() {
         //Switch simplement de scene
-        Stage stage = (Stage) retour.getScene().getWindow();
-
-        stage.setScene(MainApp.getMenu());
+        MainApp.stage.setScene(MainApp.menu);
     }
 
     @FXML

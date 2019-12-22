@@ -33,7 +33,7 @@ public class ControleurDialogVenteCompte {
     }
 
     private void initLabel() {
-        labelQuestion.setText("Combien de " + consommable.getNom() + " Voulez-vous vendre ?");
+        labelQuestion.setText("Combien de " + consommable.getNom() + " voulez-vous vendre ?");
     }
 
     private void initTextField() {
@@ -44,23 +44,21 @@ public class ControleurDialogVenteCompte {
     }
 
     private void switchScene(Stage stage) {
-        stage.setScene(MainApp.getDialogVenteCompte());
+        stage.setScene(MainApp.dialogVenteCompte);
     }
 
     @FXML
     private void annuler() {
         textField.setText("");
 
-        Stage stage = (Stage) textField.getScene().getWindow();
-
         //Switch simplement de scene
-        stage.setScene(MainApp.getCompte());
+        MainApp.stage.setScene(MainApp.compte);
     }
 
     @FXML
     private void valider() {
         try {
-            MainApp.getControleurCompte().acheter(consommable, datePicker.getValue(), Integer.parseInt(textField.getText()), gratuit.isSelected());
+            MainApp.controleurCompte.acheter(consommable, datePicker.getValue(), Integer.parseInt(textField.getText()), gratuit.isSelected());
         }
         catch (Exception e) {
             Alert alerte = new Alert(Alert.AlertType.ERROR);

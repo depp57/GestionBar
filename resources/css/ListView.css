@@ -1,10 +1,13 @@
 .list-cell{
-    -fx-font-size:22;
+    -fx-font-size:25;
     -fx-font-family: monospace;
 }
-
 
 .list-cell:filled:hover {
     -fx-background-color: #0093ff;
     -fx-text-fill: white;
+}
+
+.list-view .scroll-bar:vertical {
+    -fx-pref-width: 25px;
 }

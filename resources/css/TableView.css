@@ -8,15 +8,15 @@
 
 .table-view .column-header {
     -fx-background-color: 	#FAEBD7;
-    -fx-font-size:13px;
+    -fx-font-size:15px;
 }
 
 .table-view .table-cell {
-    -fx-font-size:13px;
+    -fx-font-size:15px;
 }
 
 .table-row-cell {
-    -fx-cell-size: 27px;
+    -fx-cell-size: 30px;
 }
 
 .bold.table-cell {

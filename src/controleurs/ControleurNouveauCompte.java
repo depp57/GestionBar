@@ -43,9 +43,7 @@ public class ControleurNouveauCompte {
     @FXML
     public void retourArriere() {
         //Switch simplement de scene
-        Stage stage = (Stage) annuler.getScene().getWindow();
-
-        stage.setScene(MainApp.getMenu());
+        MainApp.stage.setScene(MainApp.menu);
 
         texteNom.setText("");
         textePrenom.setText("");
@@ -69,15 +67,14 @@ public class ControleurNouveauCompte {
                 creerCompte(nom, prenom);
 
                 //Rafraichit la liste des comptes du menu
-                ControleurMenu controleurMenu = MainApp.getControleurMenu();
+                ControleurMenu controleurMenu = MainApp.controleurMenu;
                 controleurMenu.afficherComptes(FXCollections.observableArrayList(controleurMenu.getIdentitesComptes()));
 
 
                 //Switch simplement de scene
-                Stage stage = (Stage) annuler.getScene().getWindow();
-                stage.setScene(MainApp.getCompte());
+                MainApp.stage.setScene(MainApp.compte);
                 //Passe le compte au controleur
-                MainApp.getControleurCompte().setCompte(nom, prenom);
+                MainApp.controleurCompte.setCompte(nom, prenom);
             }
             catch (SQLException e) {
                 Alert alerte = new Alert(Alert.AlertType.INFORMATION);

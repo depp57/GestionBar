@@ -11,44 +11,44 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1118.0" style="-fx-background-color: #B0C4DE;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleurs.ControleurDialogVenteCompte">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1020.0" prefWidth="1920.0" style="-fx-background-color: #3498db;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleurs.ControleurDialogVenteCompte">
    <children>
-      <Button fx:id="annuler" layoutX="934.0" layoutY="680.0" mnemonicParsing="false" onAction="#annuler" prefHeight="106.0" prefWidth="170.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Annuler">
+      <Button fx:id="annuler" layoutX="1630.0" layoutY="890.0" mnemonicParsing="false" onAction="#annuler" prefWidth="250.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Annuler">
          <font>
-            <Font name="Calibri Bold" size="30.0" />
+            <Font name="Calibri Bold" size="50.0" />
          </font>
       </Button>
-      <Button fx:id="valider" layoutX="659.0" layoutY="680.0" mnemonicParsing="false" onAction="#valider" prefHeight="106.0" prefWidth="170.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Valider">
+      <Button fx:id="valider" layoutX="1230.0" layoutY="890.0" mnemonicParsing="false" onAction="#valider" prefWidth="250.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Valider">
          <font>
-            <Font name="Calibri Bold" size="30.0" />
+            <Font name="Calibri Bold" size="50.0" />
          </font>
       </Button>
-      <Label layoutX="367.0" layoutY="28.0" text="Confirmation">
+      <Label layoutX="765.0" layoutY="30.0" text="Confirmation">
          <font>
             <Font name="Calibri Bold" size="70.0" />
          </font>
       </Label>
-      <Label fx:id="labelQuestion" layoutX="160.0" layoutY="120.0" prefHeight="121.0" prefWidth="291.0" text="Combien de .. voulez-vous vendre ?" wrapText="true">
+      <Label fx:id="labelQuestion" layoutX="300.0" layoutY="170.0" prefHeight="120.0" prefWidth="450.0" text="Combien de .. voulez-vous vendre ?" wrapText="true">
          <font>
-            <Font name="Calibri Bold" size="30.0" />
+            <Font name="Calibri Bold" size="35.0" />
          </font>
       </Label>
-      <TextField fx:id="textField" layoutX="245.0" layoutY="276.0" prefHeight="55.0" prefWidth="120.0">
+      <TextField fx:id="textField" layoutX="390.0" layoutY="330.0" prefHeight="55.0" prefWidth="120.0">
          <font>
-            <Font name="Calibri" size="30.0" />
+            <Font name="Calibri" size="35.0" />
          </font>
       </TextField>
-      <DatePicker fx:id="datePicker" layoutX="744.0" layoutY="276.0" prefHeight="55.0" prefWidth="217.0" />
-      <Label layoutX="755.0" layoutY="149.0" prefHeight="63.0" prefWidth="195.0" text="A quelle date ?" wrapText="true">
+      <DatePicker fx:id="datePicker" layoutX="1000.0" layoutY="330.0" prefHeight="80.0" prefWidth="240.0" style="-fx-font-size: 28px;" />
+      <Label layoutX="1000.0" layoutY="200.0" text="A quelle date ?" wrapText="true">
          <font>
-            <Font name="Calibri Bold" size="30.0" />
+            <Font name="Calibri Bold" size="35.0" />
          </font>
       </Label>
-      <CheckBox fx:id="gratuit" layoutX="744.0" layoutY="378.0" mnemonicParsing="false" prefHeight="81.0" prefWidth="217.0" stylesheets="@../css/CheckBox.css" text="Vendre gratuitement" wrapText="true">
+      <CheckBox fx:id="gratuit" layoutX="1000.0" layoutY="480.0" mnemonicParsing="false" prefHeight="100.0" stylesheets="@../css/CheckBox.css" text="Vendre gratuitement" wrapText="true">
          <font>
-            <Font name="Calibri Bold" size="15.0" />
+            <Font name="Calibri Bold" size="35.0" />
          </font></CheckBox>
-      <AnchorPane layoutX="125.0" layoutY="350.0" prefHeight="420.0" prefWidth="360.0">
+      <AnchorPane layoutX="270.0" layoutY="460.0" prefHeight="420.0" prefWidth="360.0">
          <children>
             <GridPane prefHeight="420.0" prefWidth="360.0">
               <columnConstraints>

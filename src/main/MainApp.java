@@ -2,6 +2,8 @@ package main;
 
 import controleurs.*;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,14 +14,14 @@ import java.nio.file.Paths;
 
 public class MainApp extends Application {
 
-    private double x, y;
 
-    private static Scene menu, nouveauCompte, compte, stocks, dialogStocks, dialogVenteCompte, modifConsos;
-    private static ControleurMenu controleurMenu;
-    private static ControleurCompte controleurCompte;
-    private static ControleurStocks controleurStocks;
-    private static ControleurDialogStocks controleurDialogStocks;
-    private static ControleurDialogVenteCompte controleurDialogVenteCompte;
+    public static Scene menu, nouveauCompte, compte, stocks, dialogStocks, dialogVenteCompte, modifConsos;
+    public static ControleurMenu controleurMenu;
+    public static ControleurCompte controleurCompte;
+    public static ControleurStocks controleurStocks;
+    public static ControleurDialogStocks controleurDialogStocks;
+    public static ControleurDialogVenteCompte controleurDialogVenteCompte;
+    public static Stage stage;
 
     public static void main(String[] args) {
         launch(args);
@@ -27,6 +29,8 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        stage = primaryStage;
+
         //Connecte à la base de donnée
         DataBase.openConnection();
 
@@ -63,63 +67,10 @@ public class MainApp extends Application {
         parent = fxmlLoader.load();
         modifConsos = new Scene(parent);
 
-        ajouterDragScene(menu, primaryStage);
-        ajouterDragScene(nouveauCompte, primaryStage);
-        ajouterDragScene(compte, primaryStage);
-        ajouterDragScene(stocks, primaryStage);
-        ajouterDragScene(dialogVenteCompte, primaryStage);
+        stage.setScene(menu);
 
-        primaryStage.setScene(menu);
+        stage.show();
 
-        primaryStage.show();
-    }
-
-    public static Scene getMenu() { return menu; }
-
-    public static Scene getNouveauCompte() {
-        return nouveauCompte;
-    }
-
-    public static Scene getCompte() {
-        return compte;
-    }
-
-    public static Scene getStocks() {
-        return stocks;
-    }
-
-    public static Scene getDialogStocks() { return dialogStocks; }
-
-    public static Scene getDialogVenteCompte() { return dialogVenteCompte; }
-
-    public static Scene getModifConsos() { return modifConsos; }
-
-    public static ControleurMenu getControleurMenu() { return controleurMenu; }
-
-    public static ControleurCompte getControleurCompte() { return controleurCompte; }
-
-    public static ControleurStocks getControleurStocks() { return controleurStocks; }
-
-    public static ControleurDialogStocks getControleurDialogStocks() {
-        return controleurDialogStocks;
-    }
-
-    public static ControleurDialogVenteCompte getControleurDialogVenteCompte() {
-        return controleurDialogVenteCompte;
-    }
-
-
-    private void ajouterDragScene(Scene scene, Stage stage) {
-        //drag it here
-        scene.setOnMousePressed(event -> {
-            x = event.getSceneX();
-            y = event.getSceneY();
-        });
-        scene.setOnMouseDragged(event -> {
-
-            stage.setX(event.getScreenX() - x);
-            stage.setY(event.getScreenY() - y);
-
-        });
+        stage.setMaximized(true);
     }
 }

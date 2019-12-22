@@ -31,9 +31,7 @@ public class ControleurModifConsos {
     @FXML
     private void retour() {
         //Switch simplement de scene
-        Stage stage = (Stage) retour.getScene().getWindow();
-
-        stage.setScene(MainApp.getMenu());
+        MainApp.stage.setScene(MainApp.menu);
     }
 
     @FXML
@@ -77,7 +75,7 @@ public class ControleurModifConsos {
                 try {
                     DataBase.produit_supprimer(produit);
                     initialiserListeConsos();
-                    MainApp.getControleurStocks().majDonnees();
+                    MainApp.controleurStocks.majDonnees();
                 }
                 catch (SQLException e) {
                     Alert alerte2 = new Alert(Alert.AlertType.WARNING);
@@ -166,7 +164,7 @@ public class ControleurModifConsos {
                 DataBase.produit_modifier(produit, newConso.getNom(), newConso.getPrixAchat(), newConso.getPrixVente(), newConso.getCategorie(), newConso.getNomRecette());
 
                 initialiserListeConsos();
-                MainApp.getControleurStocks().majDonnees();
+                MainApp.controleurStocks.majDonnees();
             }
         }
         catch (Exception e) {
@@ -243,7 +241,7 @@ public class ControleurModifConsos {
             try {
                 DataBase.produit_inserer(newConso.getNom(), newConso.getPrixAchat(), newConso.getPrixVente(), newConso.getCategorie(), newConso.getNomRecette());
                 initialiserListeConsos();
-                MainApp.getControleurStocks().majDonnees();
+                MainApp.controleurStocks.majDonnees();
             }
             catch (SQLException e) {
                 e.printStackTrace();

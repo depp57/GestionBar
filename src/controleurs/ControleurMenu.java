@@ -9,7 +9,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import main.MainApp;
 
 import utils.DataBase;
@@ -47,9 +46,7 @@ public class ControleurMenu {
     @FXML
     private void creerCompte() {
         //Switch simplement de scene
-        Stage stage = (Stage) creerCompte.getScene().getWindow();
-
-        stage.setScene(MainApp.getNouveauCompte());
+        MainApp.stage.setScene(MainApp.nouveauCompte);
     }
 
     @FXML
@@ -160,8 +157,9 @@ public class ControleurMenu {
         //Entrer
         if(event.getCode().equals(KeyCode.ENTER) && listeComptes.getSelectionModel().getSelectedItem() != null ) {
             String compte = listeComptes.getSelectionModel().getSelectedItem();
-            String prenom = compte.split(" ")[0];
-            String nom = compte.substring(30);
+            String[] str = compte.split(" ");
+            String prenom = str[0];
+            String nom = str[str.length-1];
 
             ouvrirCompte(nom, prenom);
 
@@ -170,8 +168,9 @@ public class ControleurMenu {
         //Supprimer
         if(event.getCode().equals(KeyCode.BACK_SPACE) && listeComptes.getSelectionModel().getSelectedItem() != null ) {
             String compte = listeComptes.getSelectionModel().getSelectedItem();
-            String prenom = compte.split(" ")[0];
-            String nom = compte.substring(30);
+            String[] str = compte.split(" ");
+            String prenom = str[0];
+            String nom = str[str.length-1];
 
             supprimerCompte(nom, prenom);
         }
@@ -188,9 +187,7 @@ public class ControleurMenu {
     @FXML
     private void modifierConsos() {
         //Switch simplement de scene
-        Stage stage = (Stage) creerCompte.getScene().getWindow();
-
-        stage.setScene(MainApp.getModifConsos());
+        MainApp.stage.setScene(MainApp.modifConsos);
     }
 
     /**
@@ -224,19 +221,15 @@ public class ControleurMenu {
 
     private void ouvrirCompte(String nom, String prenom) {
         //Switch simplement de scene
-        Stage stage = (Stage) creerCompte.getScene().getWindow();
-
-        stage.setScene(MainApp.getCompte());
+        MainApp.stage.setScene(MainApp.compte);
 
         //Passe le compte au controleur
-        MainApp.getControleurCompte().setCompte(nom, prenom);
+        MainApp.controleurCompte.setCompte(nom, prenom);
     }
 
     @FXML
     private void gererStocks() {
         //Switch simplement de scene
-        Stage stage = (Stage) creerCompte.getScene().getWindow();
-
-        stage.setScene(MainApp.getStocks());
+        MainApp.stage.setScene(MainApp.stocks);
     }
 }

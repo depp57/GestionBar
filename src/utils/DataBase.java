@@ -187,7 +187,7 @@ public abstract class DataBase {
 
         while(rs.next()) {
             StringBuilder compte = new StringBuilder(rs.getString("prenom"));
-            int nbSpace = 30 - compte.length();
+            int nbSpace = 52 - compte.length();
 
             for(int i = 0; i < nbSpace; i++)
                 compte.append(" ");

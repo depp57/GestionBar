@@ -60,35 +60,25 @@ public class ControleurDialogStocks {
 
     private void switchScene(Stage stage) {
         //Switch simplement de scene
-        stage.setScene(MainApp.getDialogStocks());
-
-        //Centre le stage
-        stage.setX(stage.getX() + stage.getWidth()/2);
-        stage.setY(stage.getY() + stage.getHeight()/2);
+        stage.setScene(MainApp.dialogStocks);
     }
 
     @FXML
     private void annuler() {
         textField.setText("");
 
-        Stage stage = (Stage) gratuit.getScene().getWindow();
-
-        //Décentre le stage
-        stage.setX(stage.getX() - stage.getWidth()/2);
-        stage.setY(stage.getY() - stage.getHeight()/2);
-
         //Switch simplement de scene
-        stage.setScene(MainApp.getStocks());
+        MainApp.stage.setScene(MainApp.stocks);
     }
 
     @FXML
     private void valider() {
         if (!textField.getText().equals("")) {
             if (achat)
-                MainApp.getControleurStocks().acheter(nomProduit, Integer.parseInt(textField.getText()), gratuit.isSelected());
+                MainApp.controleurStocks.acheter(nomProduit, Integer.parseInt(textField.getText()), gratuit.isSelected());
             else {
                 try {
-                    MainApp.getControleurStocks().vendre(nomProduit, Integer.parseInt(textField.getText()), gratuit.isSelected());
+                    MainApp.controleurStocks.vendre(nomProduit, Integer.parseInt(textField.getText()), gratuit.isSelected());
                 }
                 catch (ControleurStocks.ExceptionStock exceptionStock) {
                     Alert alerte = new Alert(Alert.AlertType.WARNING);

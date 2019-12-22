@@ -1,54 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="747.0" prefWidth="1146.0" style="-fx-background-color: #B0C4DE;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleurs.ControleurStocks">
+<AnchorPane prefHeight="1020.0" prefWidth="1920.0" style="-fx-background-color: #3498db;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleurs.ControleurStocks">
    <children>
-      <Button fx:id="gestionDesComptes" layoutX="860.0" layoutY="659.0" mnemonicParsing="false" onAction="#gestionDesComptes" prefHeight="74.0" prefWidth="272.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Retour">
+      <Button fx:id="gestionDesComptes" layoutX="1630.0" layoutY="890.0" mnemonicParsing="false" onAction="#gestionDesComptes" prefWidth="250.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Retour">
          <font>
-            <Font name="Calibri Bold" size="40.0" />
+            <Font name="Calibri Bold" size="50.0" />
          </font>
       </Button>
-      <TableView fx:id="tableStocks" layoutX="14.0" layoutY="10.0" onMouseClicked="#raccourciDoubleClic" prefHeight="728.0" prefWidth="550.0" stylesheets="@../css/TableViewStock.css">
+      <TableView fx:id="tableStocks" layoutX="10.0" layoutY="10.0" onMouseClicked="#raccourciDoubleClic" prefHeight="1000.0" prefWidth="900.0" stylesheets="@../css/TableViewStock.css">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <Label fx:id="labelAchat" layoutX="727.0" layoutY="325.0" stylesheets="@../css/Label.css" text="Total achat : ">
+      <Label fx:id="labelAchat" layoutX="1145.0" layoutY="430.0" stylesheets="@../css/Label.css" text="Total achat : ">
          <padding>
             <Insets left="2.0" right="2.0" />
          </padding>
       </Label>
-      <Label fx:id="labelBenefices" layoutX="727.0" layoutY="465.0" stylesheets="@../css/Label.css" text="Bénéfices : ">
+      <Label fx:id="labelBenefices" layoutX="1145.0" layoutY="630.0" stylesheets="@../css/Label.css" text="Bénéfices : ">
          <padding>
             <Insets left="2.0" right="2.0" />
          </padding>
       </Label>
-      <Label fx:id="labelVente" layoutX="727.0" layoutY="395.0" stylesheets="@../css/Label.css" text="Total vente : ">
+      <Label fx:id="labelVente" layoutX="1145.0" layoutY="530.0" stylesheets="@../css/Label.css" text="Total vente : ">
          <padding>
             <Insets left="2.0" right="2.0" />
          </padding>
       </Label>
-      <MenuButton fx:id="acheter" layoutX="584.0" layoutY="96.0" mnemonicParsing="false" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Acheter">
+      <MenuButton fx:id="acheter" layoutX="1043.0" layoutY="174.0" mnemonicParsing="false" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Acheter">
          <items>
             <MenuItem mnemonicParsing="false" text="Action 1" />
             <MenuItem mnemonicParsing="false" text="Action 2" />
          </items>
          <font>
-            <Font name="Calibri Bold" size="40.0" />
+            <Font name="Calibri Bold" size="50.0" />
          </font>
       </MenuButton>
-      <MenuButton fx:id="vendre" layoutX="894.0" layoutY="96.0" mnemonicParsing="false" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Vendre">
+      <MenuButton fx:id="vendre" layoutX="1533.0" layoutY="174.0" mnemonicParsing="false" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Vendre">
          <items>
             <MenuItem mnemonicParsing="false" text="Action 1" />
             <MenuItem mnemonicParsing="false" text="Action 2" />
          </items>
          <font>
-            <Font name="Calibri Bold" size="40.0" />
+            <Font name="Calibri Bold" size="50.0" />
          </font>
       </MenuButton>
    </children>

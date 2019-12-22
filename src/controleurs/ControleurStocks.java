@@ -6,14 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import excelUtilities.ValeurTableStock;
 import main.MainApp;
 
 import utils.DataBase;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class ControleurStocks {
 
@@ -43,9 +41,7 @@ public class ControleurStocks {
     @FXML
     private void gestionDesComptes() {
         //Switch simplement de scene
-        Stage stage = (Stage) gestionDesComptes.getScene().getWindow();
-
-        stage.setScene(MainApp.getMenu());
+        MainApp.stage.setScene(MainApp.menu);
     }
 
     private void chargerDonnees() {
@@ -197,18 +193,16 @@ public class ControleurStocks {
 
     @FXML
     private void handleAcheter(String produit) {
-        ControleurDialogStocks controleur = MainApp.getControleurDialogStocks();
-        Stage stage = (Stage) gestionDesComptes.getScene().getWindow();
+        ControleurDialogStocks controleur = MainApp.controleurDialogStocks;
 
-        controleur.demanderNombreUtilisateur(stage, produit, true);
+        controleur.demanderNombreUtilisateur(MainApp.stage, produit, true);
     }
 
     @FXML
     private void handleVendre(String produit) {
-        ControleurDialogStocks controleur = MainApp.getControleurDialogStocks();
-        Stage stage = (Stage) gestionDesComptes.getScene().getWindow();
+        ControleurDialogStocks controleur = MainApp.controleurDialogStocks;
 
-        controleur.demanderNombreUtilisateur(stage, produit, false);
+        controleur.demanderNombreUtilisateur(MainApp.stage, produit, false);
     }
 
     /**
