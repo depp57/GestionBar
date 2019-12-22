@@ -17,7 +17,7 @@ Créé par *Sacha Thommet*.
 * [ ] Todolist de Kévin
   * [x] Clavier numérique
   * [x] Défile les 2 JTables ensemble
-  * [ ] Plein écran
+  * [x] Plein écran
   * [ ] Modifier les quantité produits mis à une date dans les fiches personnelles
   * [ ] Nouvelle page chaque année
   * [ ] Nouveau bouton gestion achat VOIR FEUILLE
