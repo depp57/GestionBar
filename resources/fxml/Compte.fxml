@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="980.0" prefWidth="1118.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleurs.ControleurCompte">
+   <children>
+      <Pane prefHeight="980.0" prefWidth="1118.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="retour" layoutX="917.0" layoutY="892.0" mnemonicParsing="false" onAction="#retourArriere" prefHeight="68.0" prefWidth="187.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Retour">
+               <font>
+                  <Font name="Calibri Bold" size="35.0" />
+               </font>
+            </Button>
+            <Pane prefHeight="82.0" prefWidth="1118.0" style="-fx-background-color: #B0C4DE;">
+               <children>
+                  <Label fx:id="labelProprietaireCompte" alignment="CENTER" layoutY="4.0" prefHeight="74.0" prefWidth="1118.0" text="nomDuPropriétaire">
+                     <font>
+                        <Font name="Calibri Bold" size="40.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="74.0" fitWidth="74.0" layoutX="132.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/nouveauCompte.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <TableView fx:id="dataTable" layoutX="34.0" layoutY="123.0" onKeyPressed="#raccourciClavierListePresse" onMouseClicked="#raccourciDoubleClic" prefHeight="568.0" prefWidth="1050.0" stylesheets="@../css/TableViewTop.css">
+              <columns>
+                <TableColumn prefWidth="75.0" text="C1" />
+                <TableColumn prefWidth="75.0" text="C2" />
+              </columns>
+            </TableView>
+            <TableView fx:id="dataTableBottom" layoutX="34.0" layoutY="691.0" prefHeight="127.0" prefWidth="1050.0" stylesheets="@../css/TableView.css">
+              <columns>
+                <TableColumn prefWidth="75.0" text="C1" />
+                <TableColumn prefWidth="75.0" text="C2" />
+              </columns>
+            </TableView>
+            <Button fx:id="crediterCompte" layoutX="377.0" layoutY="889.0" mnemonicParsing="false" onAction="#crediterCompte" prefHeight="74.0" prefWidth="364.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Créditer le compte">
+               <font>
+                  <Font name="Calibri Bold" size="35.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

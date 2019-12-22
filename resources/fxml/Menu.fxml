@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controleurs.ControleurMenu">
+   <children>
+      <VBox prefHeight="751.0" prefWidth="280.0" style="-fx-background-color: #708090;">
+         <children>
+            <Label alignment="CENTER" text="Gestion de comptes">
+               <font>
+                  <Font name="Calibri Bold" size="30.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </Label>
+            <Button fx:id="creerCompte" mnemonicParsing="false" onAction="#creerCompte" prefHeight="87.0" prefWidth="271.0" style="-fx-background-color: #F4A460;" text="Créer un compte">
+               <font>
+                  <Font name="Calibri Bold" size="25.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="5.0" top="100.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="gererStocks" mnemonicParsing="false" onAction="#gererStocks" prefHeight="87.0" prefWidth="271.0" style="-fx-background-color: #F4A460;" text="Gérer les stocks">
+               <font>
+                  <Font name="Calibri Bold" size="25.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="5.0" top="50.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="modifConso" mnemonicParsing="false" onAction="#modifierConsos" prefHeight="87.0" prefWidth="271.0" style="-fx-background-color: #F4A460;" text="Modifier les produits">
+               <font>
+                  <Font name="Calibri Bold" size="25.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="5.0" top="50.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="quitter" mnemonicParsing="false" onAction="#quitterApplication" prefHeight="87.0" prefWidth="271.0" style="-fx-background-color: #F4A460;" text="Quitter">
+               <VBox.margin>
+                  <Insets left="5.0" top="50.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Calibri Bold" size="25.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+      <StackPane layoutX="281.0" layoutY="-3.0" prefHeight="754.0" prefWidth="873.0">
+         <children>
+            <Pane prefHeight="200.0" prefWidth="300.0">
+               <children>
+                  <Label layoutX="289.0" layoutY="7.0" text="Liste des comptes">
+                     <font>
+                        <Font name="Calibri Bold" size="40.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="listeComptes" layoutX="45.0" layoutY="92.0" onKeyPressed="#raccourciClavierListePresse" onKeyTyped="#raccourciClavierListe" onMouseClicked="#raccourciDoubleClic" prefHeight="648.0" prefWidth="784.0" style="-fx-background-color: #B0C4DE;" stylesheets="@../css/ListView.css" />
+                  <ImageView fitHeight="28.0" fitWidth="27.0" layoutX="598.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true" />
+                  <Button fx:id="flecheNom" layoutX="98.0" layoutY="60.0" mnemonicParsing="false" onAction="#boutonFlecheNom" prefHeight="28.0" prefWidth="21.0" styleClass="arrow-up" stylesheets="@../css/Button.css" />
+                  <Button fx:id="flechePrenom" layoutX="508.0" layoutY="60.0" mnemonicParsing="false" onAction="#boutonFlechePrenom" prefHeight="28.0" prefWidth="21.0" styleClass="arrow-up" stylesheets="@../css/Button.css" />
+                  <Label layoutX="558.0" layoutY="59.0" text="Nom">
+                     <font>
+                        <Font name="Calibri Bold" size="25.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="148.0" layoutY="59.0" text="Prenom">
+                     <font>
+                        <Font name="Calibri Bold" size="25.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+         </children></StackPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="747.0" prefWidth="1146.0" style="-fx-background-color: #B0C4DE;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleurs.ControleurStocks">
+   <children>
+      <Button fx:id="gestionDesComptes" layoutX="860.0" layoutY="659.0" mnemonicParsing="false" onAction="#gestionDesComptes" prefHeight="74.0" prefWidth="272.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Retour">
+         <font>
+            <Font name="Calibri Bold" size="40.0" />
+         </font>
+      </Button>
+      <TableView fx:id="tableStocks" layoutX="14.0" layoutY="10.0" onMouseClicked="#raccourciDoubleClic" prefHeight="728.0" prefWidth="550.0" stylesheets="@../css/TableViewStock.css">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+        </columns>
+      </TableView>
+      <Label fx:id="labelAchat" layoutX="727.0" layoutY="325.0" stylesheets="@../css/Label.css" text="Total achat : ">
+         <padding>
+            <Insets left="2.0" right="2.0" />
+         </padding>
+      </Label>
+      <Label fx:id="labelBenefices" layoutX="727.0" layoutY="465.0" stylesheets="@../css/Label.css" text="Bénéfices : ">
+         <padding>
+            <Insets left="2.0" right="2.0" />
+         </padding>
+      </Label>
+      <Label fx:id="labelVente" layoutX="727.0" layoutY="395.0" stylesheets="@../css/Label.css" text="Total vente : ">
+         <padding>
+            <Insets left="2.0" right="2.0" />
+         </padding>
+      </Label>
+      <MenuButton fx:id="acheter" layoutX="584.0" layoutY="96.0" mnemonicParsing="false" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Acheter">
+         <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+         </items>
+         <font>
+            <Font name="Calibri Bold" size="40.0" />
+         </font>
+      </MenuButton>
+      <MenuButton fx:id="vendre" layoutX="894.0" layoutY="96.0" mnemonicParsing="false" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Vendre">
+         <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+         </items>
+         <font>
+            <Font name="Calibri Bold" size="40.0" />
+         </font>
+      </MenuButton>
+   </children>
+</AnchorPane>

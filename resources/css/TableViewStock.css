@@ -1,0 +1,24 @@
+.table-row-cell:empty {
+    -fx-background-color: white;
+}
+
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}
+
+.table-view .column-header {
+    -fx-background-color: 	#FAEBD7;
+    -fx-font-size:13px;
+}
+
+.table-view .table-cell {
+    -fx-font-size:18px;
+}
+
+.table-row-cell {
+    -fx-cell-size: 27px;
+}
+
+.table-view .cell{
+    -fx-cell-size: 35px;
+}

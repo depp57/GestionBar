@@ -1,0 +1,10 @@
+.list-cell{
+    -fx-font-size:22;
+    -fx-font-family: monospace;
+}
+
+
+.list-cell:filled:hover {
+    -fx-background-color: #0093ff;
+    -fx-text-fill: white;
+}

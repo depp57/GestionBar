@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #B0C4DE;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controleurs.ControleurDialogStocks">
+   <children>
+      <Button fx:id="annuler" cancelButton="true" layoutX="446.0" layoutY="331.0" mnemonicParsing="false" onAction="#annuler" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Annuler">
+         <font>
+            <Font name="Calibri Bold" size="30.0" />
+         </font>
+      </Button>
+      <Button fx:id="valider" defaultButton="true" layoutX="235.0" layoutY="331.0" mnemonicParsing="false" onAction="#valider" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Valider">
+         <font>
+            <Font name="Calibri Bold" size="30.0" />
+         </font>
+      </Button>
+      <CheckBox fx:id="gratuit" layoutX="451.0" layoutY="169.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="130.0" stylesheets="@../css/CheckBox.css" text="Acheter gratuitement" wrapText="true">
+         <font>
+            <Font name="Calibri Bold" size="15.0" />
+         </font>
+      </CheckBox>
+      <TextField fx:id="textField" layoutX="300.0" layoutY="184.0" prefHeight="34.0" prefWidth="98.0">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </TextField>
+      <Label layoutX="193.0" layoutY="14.0" text="Confirmation">
+         <font>
+            <Font name="Calibri Bold" size="40.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelQuestion" layoutX="43.0" layoutY="150.0" prefHeight="102.0" prefWidth="233.0" text="Combien de .. voulez-vous acheter ?" wrapText="true">
+         <font>
+            <Font name="Calibri Bold" size="23.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
