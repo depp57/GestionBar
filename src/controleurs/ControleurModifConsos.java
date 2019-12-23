@@ -128,7 +128,8 @@ public class ControleurModifConsos {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            choiceBoxIngredients.setValue(conso.getNomRecette());
+            String recette = conso.getNomRecette();
+            choiceBoxIngredients.setValue(recette != null ? recette : "Aucun");
 
             dialogPane.setContent(new VBox(10, labelNomProduit, textNomProduit, labelPrixAchat, textPrixAchat,
                     labelPrixVente, textPrixVente, labelTypeProduit, choiceBoxTypeProduit, labelingredient, choiceBoxIngredients));

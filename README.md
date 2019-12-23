@@ -1,4 +1,4 @@
-# GestionBar
+﻿# GestionBar
 
 Logiciel de gestion de bar pour la caserne de pompier à Rouhling.
 
@@ -17,12 +17,12 @@ Créé par *Sacha Thommet*.
 * [ ] Todolist de Kévin
   * [x] Clavier numérique
   * [x] Défile les 2 JTables ensemble
+  * [x] produit consommé de base AUCUN
   * [ ] Plein écran
   * [ ] Modifier les quantité produits mis à une date dans les fiches personnelles
   * [ ] Nouvelle page chaque année
   * [ ] Nouveau bouton gestion achat VOIR FEUILLE
   * [ ] Faire que y'a toujours le libelle des produits à gauche dans les comptes
-  * [ ] produit consommé de base AUCUN
 
 * [ ] Optimisations
   * [ ] Supprimer code inutile
