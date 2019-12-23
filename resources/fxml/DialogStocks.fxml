@@ -7,36 +7,36 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #B0C4DE;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controleurs.ControleurDialogStocks">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1020.0" prefWidth="1920.0" style="-fx-background-color: #3498db;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleurs.ControleurDialogStocks">
    <children>
-      <Button fx:id="annuler" cancelButton="true" layoutX="446.0" layoutY="331.0" mnemonicParsing="false" onAction="#annuler" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Annuler">
+      <Button fx:id="annuler" cancelButton="true" layoutX="1630.0" layoutY="890.0" mnemonicParsing="false" onAction="#annuler" prefWidth="250.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Annuler">
          <font>
-            <Font name="Calibri Bold" size="30.0" />
+            <Font name="Calibri Bold" size="50.0" />
          </font>
       </Button>
-      <Button fx:id="valider" defaultButton="true" layoutX="235.0" layoutY="331.0" mnemonicParsing="false" onAction="#valider" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Valider">
+      <Button fx:id="valider" defaultButton="true" layoutX="1230.0" layoutY="890.0" mnemonicParsing="false" onAction="#valider" prefWidth="250.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Valider">
          <font>
-            <Font name="Calibri Bold" size="30.0" />
+            <Font name="Calibri Bold" size="50.0" />
          </font>
       </Button>
-      <CheckBox fx:id="gratuit" layoutX="451.0" layoutY="169.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="130.0" stylesheets="@../css/CheckBox.css" text="Acheter gratuitement" wrapText="true">
+      <CheckBox fx:id="gratuit" layoutX="1000.0" layoutY="480.0" mnemonicParsing="false" prefHeight="100.0" stylesheets="@../css/CheckBox.css" text="Acheter gratuitement" wrapText="true">
          <font>
-            <Font name="Calibri Bold" size="15.0" />
+            <Font name="Calibri Bold" size="35.0" />
          </font>
       </CheckBox>
-      <TextField fx:id="textField" layoutX="300.0" layoutY="184.0" prefHeight="34.0" prefWidth="98.0">
+      <TextField fx:id="textField" layoutX="405.0" layoutY="558.0" prefHeight="55.0" prefWidth="120.0">
          <font>
-            <Font name="Calibri" size="18.0" />
+            <Font name="Calibri" size="35.0" />
          </font>
       </TextField>
-      <Label layoutX="193.0" layoutY="14.0" text="Confirmation">
+      <Label layoutX="765.0" layoutY="30.0" text="Confirmation">
          <font>
-            <Font name="Calibri Bold" size="40.0" />
+            <Font name="Calibri Bold" size="70.0" />
          </font>
       </Label>
-      <Label fx:id="labelQuestion" layoutX="43.0" layoutY="150.0" prefHeight="102.0" prefWidth="233.0" text="Combien de .. voulez-vous acheter ?" wrapText="true">
+      <Label fx:id="labelQuestion" layoutX="315.0" layoutY="398.0" prefHeight="120.0" prefWidth="450.0" text="Combien de .. voulez-vous acheter ?" wrapText="true">
          <font>
-            <Font name="Calibri Bold" size="23.0" />
+            <Font name="Calibri Bold" size="35.0" />
          </font>
       </Label>
    </children>

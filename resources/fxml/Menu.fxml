@@ -20,7 +20,7 @@
                   <Insets left="10.0" top="20.0" />
                </VBox.margin>
             </Label>
-            <Button fx:id="creerCompte" mnemonicParsing="false" onAction="#creerCompte" prefHeight="120.0" prefWidth="480.0" style="-fx-background-color: #F4A460;" text="Créer un compte">
+            <Button fx:id="creerCompte" mnemonicParsing="false" onAction="#creerCompte" prefHeight="120.0" prefWidth="480.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Créer un compte">
                <font>
                   <Font name="Calibri Bold" size="25.0" />
                </font>
@@ -28,7 +28,7 @@
                   <Insets top="100.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="gererStocks" mnemonicParsing="false" onAction="#gererStocks" prefHeight="120.0" prefWidth="480.0" style="-fx-background-color: #F4A460;" text="Gérer les stocks">
+            <Button fx:id="gererStocks" mnemonicParsing="false" onAction="#gererStocks" prefHeight="120.0" prefWidth="480.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Gérer les stocks">
                <font>
                   <Font name="Calibri Bold" size="25.0" />
                </font>
@@ -36,7 +36,7 @@
                   <Insets top="50.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="modifConso" mnemonicParsing="false" onAction="#modifierConsos" prefHeight="120.0" prefWidth="480.0" style="-fx-background-color: #F4A460;" text="Modifier les produits">
+            <Button fx:id="modifConso" mnemonicParsing="false" onAction="#modifierConsos" prefHeight="120.0" prefWidth="480.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Modifier les produits">
                <font>
                   <Font name="Calibri Bold" size="25.0" />
                </font>
@@ -44,7 +44,7 @@
                   <Insets top="50.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="120.0" prefWidth="480.0" style="-fx-background-color: #F4A460;" text="TODO">
+            <Button mnemonicParsing="false" prefHeight="120.0" prefWidth="480.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="TODO">
                <font>
                   <Font name="Calibri Bold" size="25.0" />
                </font>
@@ -52,7 +52,7 @@
                   <Insets top="50.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="quitter" mnemonicParsing="false" onAction="#quitterApplication" prefHeight="120.0" prefWidth="480.0" style="-fx-background-color: #F4A460;" text="Quitter">
+            <Button fx:id="quitter" mnemonicParsing="false" onAction="#quitterApplication" prefHeight="120.0" prefWidth="480.0" styleClass="boutonPrincipaux" stylesheets="@../css/Button.css" text="Quitter">
                <VBox.margin>
                   <Insets top="50.0" />
                </VBox.margin>

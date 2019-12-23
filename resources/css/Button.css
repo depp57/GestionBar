@@ -9,3 +9,8 @@
     -fx-background-color:  #F4A460;
     -fx-background-radius: 10px;
 }
+
+.boutonPrincipaux:hover {
+    -fx-opacity: 1;
+    -fx-background-color:  #d35400;
+}
