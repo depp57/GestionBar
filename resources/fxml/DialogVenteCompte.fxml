@@ -109,7 +109,7 @@
                         <Font name="Calibri Bold" size="30.0" />
                      </font>
                   </Button>
-                  <Button maxHeight="1000" maxWidth="1000" mnemonicParsing="false" onAction="#handle_nk_suppr" style="-fx-font-size: 17;" stylesheets="@../css/NumericKeyboard.css" text="Suppr" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button maxHeight="1000" maxWidth="1000" mnemonicParsing="false" onAction="#handle_nk_suppr" stylesheets="@../css/NumericKeyboard.css" text="Suppr" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children>

@@ -91,4 +91,68 @@ public class ControleurDialogStocks {
         }
         annuler();
     }
+
+
+    //---------------------------- Numeric Keypad ----------------------------//
+
+    private void handleButtonClick(int button) {
+        textField.setText(textField.getText()+button);
+    }
+
+    @FXML
+    private void handle_nk_suppr() {
+        String beforeRemove = textField.getText();
+        if (beforeRemove.length() > 0)
+            textField.setText(textField.getText(0, beforeRemove.length()-1));
+    }
+
+    @FXML
+    private void handle_nk_0() {
+        handleButtonClick(0);
+    }
+
+    @FXML
+    private void handle_nk_1() {
+        handleButtonClick(1);
+    }
+
+    @FXML
+    private void handle_nk_2() {
+        handleButtonClick(2);
+    }
+
+    @FXML
+    private void handle_nk_3() {
+        handleButtonClick(3);
+    }
+
+    @FXML
+    private void handle_nk_4() {
+        handleButtonClick(4);
+    }
+
+    @FXML
+    private void handle_nk_5() {
+        handleButtonClick(5);
+    }
+
+    @FXML
+    private void handle_nk_6() {
+        handleButtonClick(6);
+    }
+
+    @FXML
+    private void handle_nk_7() {
+        handleButtonClick(7);
+    }
+
+    @FXML
+    private void handle_nk_8() {
+        handleButtonClick(8);
+    }
+
+    @FXML
+    private void handle_nk_9() {
+        handleButtonClick(9);
+    }
 }
