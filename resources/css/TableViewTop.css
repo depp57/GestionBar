@@ -15,6 +15,10 @@
     -fx-font-size:15px;
 }
 
+.table-view .table-cell:hover {
+    -fx-background-color:  #d35400;
+}
+
 .table-row-cell {
     -fx-cell-size: 30px;
 }
