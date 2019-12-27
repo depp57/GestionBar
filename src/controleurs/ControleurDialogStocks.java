@@ -28,7 +28,7 @@ public class ControleurDialogStocks {
         this.nomProduit = nomProduit;
         this.achat = achat;
 
-        gratuit.setSelected(false);
+        gratuit.setSelected(true);
 
         if(!achat)
             gratuit.setText("Vendre gratuitement ?");

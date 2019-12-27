@@ -1,6 +1,5 @@
 package controleurs;
 
-import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.*;
@@ -17,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import main.MainApp;
 
 import java.sql.SQLException;
@@ -70,11 +68,9 @@ public class ControleurCompte{
 
         ajoutFusionScrollBars();
 
-
-        //TODO pour séléctionner 1 seule cellule
+        //Pour pouvoir sélectionner une seule cellule
         dataTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         dataTable.getSelectionModel().setCellSelectionEnabled(true);
-        //TODO
     }
 
     private void ajoutFusionScrollBars() {
@@ -220,7 +216,6 @@ public class ControleurCompte{
         }
     }
 
-    //TODO MAYBE FAUT AJOUTER UN DATEFORMATTER https://www.mkyong.com/java8/java-8-how-to-convert-string-to-localdate/
     private LocalDate getDateColonne(int index) {
         ObservableList<TableColumn<ValeurTablePrincipale, ?>> listeColonnes = dataTable.getColumns();
 
@@ -420,19 +415,15 @@ public class ControleurCompte{
 
         if (idColonne > 0 ) {
             final int quantite = dataTable.getSelectionModel().getSelectedItem().getQuantite(idColonne-1);
-            System.out.println(quantite);
-            if (quantite != 0) {
-                System.out.println("TODO ligne 425 !");
-            }
+            String date = dataTable.getColumns().get(idColonne).getText();
 
-            //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // Si quantite != 0 alors on modifie la quantite, sinon on fait bien le demanderVente...
+            if (quantite != 0)
+                MainApp.controleurDialogVenteCompte.modifierVenteUtilisateur(MainApp.stage, consommable, quantite, date);
+            else
+                MainApp.controleurDialogVenteCompte.demanderVenteUtilisateur(MainApp.stage, consommable, date);
         }
-
-        MainApp.controleurDialogVenteCompte.demanderVenteUtilisateur((Stage) retour.getScene().getWindow(), consommable);
     }
 
-    //TODO DataBase.compte_acheter(idCompte, consommable.getNom(), quantite, date, 0); 0 A METTRE EN VARIABLE (gratuit)
     void acheter(Consommable consommable, LocalDate date, int quantite, boolean gratuit) {
         try {
             DataBase.compte_acheter(idCompte, consommable.getNom(), quantite, date, gratuit ? 0 : 1);
@@ -445,6 +436,13 @@ public class ControleurCompte{
         catch (SQLException exceptionStock) {
             showAlerte(Alert.AlertType.WARNING, "Plus assez de stock", exceptionStock.getMessage().split("\n")[0].split("20001:")[1]);
         }
+    }
+
+    void modifierAchat(Consommable consommable, LocalDate date, int quantite) {
+        DataBase.compte_modifierAchat(idCompte, consommable.getNom(), date, quantite);
+
+        majDataTable();
+        MainApp.controleurStocks.majDonnees();
     }
 
     private Results demanderCreditUtilisateur() {

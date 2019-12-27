@@ -18,8 +18,7 @@ public abstract class DataBase {
         try {
             connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "Depp");
             connection.setAutoCommit(true);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -137,8 +136,7 @@ public abstract class DataBase {
 
             cStmt.execute();
             cStmt.close();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -150,8 +148,7 @@ public abstract class DataBase {
 
             cStmt.execute();
             cStmt.close();
-            }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -167,8 +164,7 @@ public abstract class DataBase {
     public static void closeConnection() {
         try {
             connection.close();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -185,11 +181,11 @@ public abstract class DataBase {
 
         ArrayList<String> comptes = new ArrayList<>();
 
-        while(rs.next()) {
+        while (rs.next()) {
             StringBuilder compte = new StringBuilder(rs.getString("prenom"));
             int nbSpace = 52 - compte.length();
 
-            for(int i = 0; i < nbSpace; i++)
+            for (int i = 0; i < nbSpace; i++)
                 compte.append(" ");
 
             compte.append(rs.getString("nom"));
@@ -208,7 +204,7 @@ public abstract class DataBase {
 
         String query;
 
-        if(typeInfo != TypeInformation.TOTAL)
+        if (typeInfo != TypeInformation.TOTAL)
             query = "SELECT " + typeInfo.getNom() + " FROM Compte_info WHERE idCompte = " + idCompte + " AND dateInfo = TO_DATE('" + Date.valueOf(date) + "', 'YYYY-MM-DD')";
 
         else
@@ -224,7 +220,7 @@ public abstract class DataBase {
     }
 
     public static int getAchatCompte(int idCompte,
-                                       LocalDate date, String intituleProduit) throws SQLException {
+                                     LocalDate date, String intituleProduit) throws SQLException {
         Statement stmt = connection.createStatement();
 
         String query = "SELECT quantite FROM Compte_achats WHERE idCompte = " + idCompte + " AND intituleProduit = '" + intituleProduit + "' AND " +
@@ -236,8 +232,7 @@ public abstract class DataBase {
         int quantite;
         try {
             quantite = rs.getInt("quantite");
-        }
-        catch(SQLException e) {
+        } catch (SQLException e) {
             quantite = 0;
         }
 
@@ -252,7 +247,7 @@ public abstract class DataBase {
 
         ArrayList<String> produits = new ArrayList<>();
 
-        while(rs.next())
+        while (rs.next())
             produits.add(rs.getString("intituleProduit"));
 
         rs.close();
@@ -289,8 +284,7 @@ public abstract class DataBase {
         int quantite;
         try {
             quantite = rs.getInt("quantite");
-        }
-        catch(SQLException e) {
+        } catch (SQLException e) {
             quantite = 0;
         }
         rs.close();
@@ -308,8 +302,7 @@ public abstract class DataBase {
             rs.close();
 
             return type;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return "Boisson";
@@ -367,15 +360,14 @@ public abstract class DataBase {
         try {
             Statement stmt = connection.createStatement();
 
-            ResultSet rs = stmt.executeQuery("SELECT TO_CHAR(dateInfo, \'dd/mm/yyyy\') FROM compte_info WHERE idCompte = " + idCompte + " ORDER BY dateInfo");
+            ResultSet rs = stmt.executeQuery("SELECT TO_CHAR(dateInfo, 'dd/mm/yyyy') FROM compte_info WHERE idCompte = " + idCompte + " ORDER BY dateInfo");
 
-            while(rs.next())
+            while (rs.next())
                 dates.add(rs.getString(1));
 
             rs.close();
             stmt.close();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -399,11 +391,62 @@ public abstract class DataBase {
 
             rs.close();
             stmt.close();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         return achat;
+    }
+
+    public static void compte_modifierAchat(int idCompte, String intituleProduit, LocalDate date, int nouvelleQuantite) {
+        double prixUnite = 0.0;
+        int oldQuantite = 0;
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement("SELECT prixAchatUnite, quantite FROM Compte_Achats WHERE idCompte = ? AND dateAchat = ? AND intituleProduit = ?");
+
+            pstmt.setInt(1, idCompte);
+            pstmt.setDate(2, Date.valueOf(date));
+            pstmt.setString(3, intituleProduit);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                prixUnite = rs.getDouble("prixAchatUnite");
+                oldQuantite = rs.getInt("quantite");
+            }
+            rs.close();
+
+
+            pstmt = connection.prepareStatement("UPDATE Compte_achats SET quantite = ? WHERE idCompte = ? AND dateAchat = ? AND intituleProduit = ?");
+            pstmt.setDouble(1, nouvelleQuantite);
+            pstmt.setInt(2, idCompte);
+            pstmt.setDate(3, Date.valueOf(date));
+            pstmt.setString(4, intituleProduit);
+            pstmt.executeUpdate();
+
+
+            pstmt = connection.prepareStatement("UPDATE Compte_info SET moins = moins - ? WHERE idCompte = ? AND dateInfo = ?");
+            pstmt.setDouble(1, (oldQuantite - nouvelleQuantite) * prixUnite);
+            pstmt.setInt(2, idCompte);
+            pstmt.setDate(3, Date.valueOf(date));
+            pstmt.executeUpdate();
+
+
+            // ------------------ STOCK ------------------ \\
+            pstmt = connection.prepareStatement("UPDATE Stock SET quantite = quantite + ? WHERE intituleProduit = ?");
+            pstmt.setInt(1, oldQuantite - nouvelleQuantite);
+            pstmt.setString(2, intituleProduit);
+            pstmt.executeUpdate();
+
+
+            pstmt = connection.prepareStatement("UPDATE Stock_info SET totalVente = totalVente - ?");
+            pstmt.setDouble(1, (oldQuantite - nouvelleQuantite) * prixUnite);
+            pstmt.executeUpdate();
+            // ------------------ STOCK ------------------ \\
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

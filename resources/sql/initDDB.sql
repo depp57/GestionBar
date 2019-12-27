@@ -58,6 +58,7 @@ CREATE TABLE Compte_achats (
     idCompte number(4),
     dateAchat date,
     intituleProduit varchar(30),
+    prixAchatUnite number(4,2),
     quantite number(4),
     CONSTRAINT pk_compte_achats PRIMARY KEY (idCompte, dateAchat, intituleProduit),
     CONSTRAINT fk_compte_achats1 FOREIGN KEY (idCompte) REFERENCES Compte(idCompte),
@@ -180,7 +181,6 @@ IS
     v_check varchar(30);
     e_produitDejaExistant exception;
     e_typeProduitIncorrect exception;
-    v_test boolean;
 BEGIN
     SELECT COUNT(*) INTO v_check FROM Produit
     WHERE intituleProduit = p_intituleProduit;
@@ -355,7 +355,6 @@ END;
 
 CREATE OR REPLACE PROCEDURE compte_acheter(p_idCompte number, p_intituleProduit varchar, p_quantite number, p_date date, p_gratuit number)
 IS
-    v_quantiteStock number(1);
     v_prix number(10,2);
     v_check number(1);
     v_dateMin date;
@@ -373,7 +372,7 @@ BEGIN
     WHERE idCompte = p_idCompte AND TO_CHAR(dateAchat, 'DD/MM/YY') = TO_CHAR(p_date, 'DD/MM/YY') AND intituleProduit = p_intituleProduit;
 
     IF (v_check = 0) THEN
-        INSERT INTO Compte_achats VALUES (p_idCompte, p_date, p_intituleProduit, p_quantite);
+        INSERT INTO Compte_achats VALUES (p_idCompte, p_date, p_intituleProduit, v_prix/p_quantite, p_quantite);
     ELSE
         UPDATE Compte_achats SET quantite = quantite + p_quantite
             WHERE idCompte = p_idCompte AND intituleProduit = p_intituleProduit AND TO_CHAR(dateAchat, 'DD/MM/YY') = TO_CHAR(p_date, 'DD/MM/YY');

@@ -13,7 +13,7 @@
             <Font name="Calibri Bold" size="50.0" />
          </font>
       </Button>
-      <ListView fx:id="listeConsos" layoutX="10.0" layoutY="110.0" onKeyPressed="#raccourciClavierListePresse" onMouseClicked="#raccourciDoubleClic" prefHeight="900.0" prefWidth="900.0" style="-fx-background-color: #B0C4DE;" stylesheets="@../css/ListView.css" />
+      <ListView fx:id="listeConsos" layoutX="10.0" layoutY="109.0" onKeyPressed="#raccourciClavierListePresse" onMouseClicked="#raccourciDoubleClic" prefHeight="902.0" prefWidth="900.0" style="-fx-background-color: #B0C4DE;" stylesheets="@../css/ListView.css" />
       <Label layoutX="277.0" layoutY="30.0" text="Liste des produits">
          <font>
             <Font name="Calibri Bold" size="50.0" />
