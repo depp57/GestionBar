@@ -19,7 +19,7 @@ Créé par *Sacha Thommet*.
   * [x] Défile les 2 JTables ensemble
   * [x] produit consommé de base AUCUN
   * [x] Plein écran
-  * [ ] Modifier les quantité produits mis à une date dans les fiches personnelles
+  * [x] Modifier les quantité produits mis à une date dans les fiches personnelles
   * [ ] Nouvelle page chaque année
   * [ ] Nouveau bouton gestion achat VOIR FEUILLE
   * [ ] Faire que y'a toujours le libelle des produits à gauche dans les comptes
