@@ -19,7 +19,7 @@ import java.util.*;
 public class ControleurMenu {
 
     @FXML
-    private Button creerCompte, flecheNom, flechePrenom;
+    private Button flecheNom, flechePrenom;
 
     @FXML
     private ListView<String> listeComptes;

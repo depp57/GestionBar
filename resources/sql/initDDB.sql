@@ -155,7 +155,7 @@ BEGIN
     WHERE p_nom = nom AND p_prenom = prenom;
 
     IF (v_check > 0) THEN
-        RAISE_APPLICATION_ERROR(-20001, p_nom || ' ' || p_prenom || ' possède déjà un compte');
+        RAISE_APPLICATION_ERROR(-20001, p_prenom || ' ' || p_nom || ' possède déjà un compte');
     END IF;
 
     v_idCompte := sequence_idCompte.nextval;

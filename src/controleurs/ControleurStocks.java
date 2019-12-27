@@ -16,9 +16,6 @@ import java.util.ArrayList;
 public class ControleurStocks {
 
     @FXML
-    private Button gestionDesComptes;
-
-    @FXML
     private TableView<ValeurTableStock> tableStocks;
 
     @FXML

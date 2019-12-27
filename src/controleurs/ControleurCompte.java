@@ -290,7 +290,7 @@ public class ControleurCompte{
         return colonne;
     }
 
-    private void enleverHeader(TableView tableView) {
+    private void enleverHeader(TableView<ValeurTableBottom> tableView) {
         Pane header = (Pane) tableView.lookup("TableHeaderRow");
         header.setMaxHeight(0);
         header.setMinHeight(0);
@@ -459,6 +459,7 @@ public class ControleurCompte{
                 Platform.runLater(textField::clear);
         });
         DatePicker datePicker = new DatePicker();
+        datePicker.setValue(LocalDate.now());
 
         dialogPane.setContent(new VBox(8, label, textField, datePicker));
         Platform.runLater(textField::requestFocus);

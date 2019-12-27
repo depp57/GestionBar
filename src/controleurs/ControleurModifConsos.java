@@ -8,7 +8,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import items.Consommable;
 import main.MainApp;
 import utils.DataBase;
@@ -21,9 +20,6 @@ import java.util.*;
 import static javafx.collections.FXCollections.observableArrayList;
 
 public class ControleurModifConsos {
-
-    @FXML
-    private Button retour;
 
     @FXML
     private ListView<String> listeConsos;

@@ -31,14 +31,6 @@ public class ValeurTableBottom {
         return "0";
     }
 
-    public void setValeurs(ArrayList<Double> listeValeurs) {
-        montant.clear();
-
-        for (Double valeurCourante : listeValeurs) {
-            montant.add(valeurCourante + "€");
-        }
-    }
-
     public String getTexte() {
         return typeInformation.getNom();
     }
