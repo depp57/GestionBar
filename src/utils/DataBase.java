@@ -355,12 +355,14 @@ public abstract class DataBase {
         return idCompte;
     }
 
-    public static String[] compte_getAllDates(int idCompte) {
+    public static String[] compte_getAllDates(int idCompte, int dateAfficher) {
         ArrayList<String> dates = new ArrayList<>();
         try {
             Statement stmt = connection.createStatement();
 
-            ResultSet rs = stmt.executeQuery("SELECT TO_CHAR(dateInfo, 'dd/mm/yyyy') FROM compte_info WHERE idCompte = " + idCompte + " ORDER BY dateInfo");
+            ResultSet rs = stmt.executeQuery("SELECT TO_CHAR(dateInfo, 'dd/mm/yyyy') FROM compte_info " +
+                    "WHERE idCompte = " + idCompte + " AND EXTRACT(year FROM dateInfo) = " + dateAfficher +
+                    " ORDER BY dateInfo");
 
             while (rs.next())
                 dates.add(rs.getString(1));

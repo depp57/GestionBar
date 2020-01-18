@@ -42,6 +42,9 @@ public class ControleurCompte{
     @FXML
     private TableView<ValeurTableBottom> dataTableBottom;
 
+    @FXML
+    private Spinner<Integer> periodeAffichage;
+
     private Stack<ActionCompte> pileActions;
 
 
@@ -71,6 +74,8 @@ public class ControleurCompte{
         //Pour pouvoir sélectionner une seule cellule
         dataTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         dataTable.getSelectionModel().setCellSelectionEnabled(true);
+
+        periodeAffichage.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2019, 2025, 2020));
     }
 
     private void ajoutFusionScrollBars() {
@@ -171,7 +176,10 @@ public class ControleurCompte{
 
         //On ajoute les colonnes
         dataTable.getColumns().add(getFirstColumn());
-        dataTable.getColumns().addAll(getDataColumns());
+
+        //affiche seulement l'année choisie
+        Integer annee = periodeAffichage.getValue();
+        dataTable.getColumns().addAll(getDataColumns(annee != null ? annee : 2020));
 
         //On ajoute la liste des produits
         ObservableList<ValeurTablePrincipale> donnees = getProduits();
@@ -327,8 +335,8 @@ public class ControleurCompte{
         return colonne;
     }
 
-    private TableColumn<ValeurTablePrincipale, Integer>[] getDataColumns() {
-        String[] dates = DataBase.compte_getAllDates(idCompte);
+    private TableColumn<ValeurTablePrincipale, Integer>[] getDataColumns(int dateAffiche) {
+        String[] dates = DataBase.compte_getAllDates(idCompte, dateAffiche);
         TableColumn<ValeurTablePrincipale, Integer>[] tableColumns = new TableColumn[dates.length];
 
 
@@ -422,6 +430,8 @@ public class ControleurCompte{
             else
                 MainApp.controleurDialogVenteCompte.demanderVenteUtilisateur(MainApp.stage, consommable, date);
         }
+        else
+            MainApp.controleurDialogVenteCompte.demanderVenteUtilisateur(MainApp.stage, consommable, LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
 
     void acheter(Consommable consommable, LocalDate date, int quantite, boolean gratuit) {
@@ -504,6 +514,11 @@ public class ControleurCompte{
     ////////////////////////////////////////// FXML \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
     @FXML
+    private void modifierPeriodeAffichage() {
+        chargerDonnees();
+    }
+
+    @FXML
     private void retourArriere() {
         //Switch simplement de scene
         MainApp.stage.setScene(MainApp.menu);
@@ -517,8 +532,7 @@ public class ControleurCompte{
 
     @FXML
     private void raccourciDoubleClic(MouseEvent event) {
-        if(event.getButton().equals(MouseButton.PRIMARY)
-                && event.getClickCount() == 2 && dataTable.getSelectionModel().getSelectedItem() != null){
+        if(event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2){
             modifierValeur(dataTable.getSelectionModel().getSelectedItem().getConsommable());
         }
     }

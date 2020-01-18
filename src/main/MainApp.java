@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 
 public class MainApp extends Application {
 
-
     public static Scene menu, nouveauCompte, compte, stocks, dialogStocks, dialogVenteCompte, modifConsos;
     public static ControleurMenu controleurMenu;
     public static ControleurCompte controleurCompte;

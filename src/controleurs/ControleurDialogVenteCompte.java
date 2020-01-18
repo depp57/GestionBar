@@ -5,7 +5,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import items.Consommable;
 import main.MainApp;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
