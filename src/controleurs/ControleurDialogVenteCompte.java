@@ -32,6 +32,7 @@ public class ControleurDialogVenteCompte {
         this.consommable = consommable;
         gratuit.setSelected(false);
         datePicker.setValue(LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        textField.requestFocus();
 
         //Car le mode modification désactive ces 2 composants
         gratuit.setDisable(false);

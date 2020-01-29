@@ -1,4 +1,4 @@
-package excelUtilities;
+package utils;
 
 public class ValeurTableStock {
 

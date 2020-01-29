@@ -1,4 +1,4 @@
-package excelUtilities;
+package utils;
 
 import items.Consommable;
 
@@ -10,11 +10,11 @@ public class ValeurTablePrincipale {
 
     private final String nomConso;
 
-    private ArrayList<Integer> quantite;
+    private ArrayList<Integer> quantites;
 
-    public ValeurTablePrincipale(Consommable consommable, ArrayList<Integer> quantite) {
+    public ValeurTablePrincipale(Consommable consommable, ArrayList<Integer> quantites) {
         this.consommable = consommable;
-        this.quantite = quantite;
+        this.quantites = quantites;
 
         nomConso = consommable.getNom();
     }
@@ -24,8 +24,8 @@ public class ValeurTablePrincipale {
     }
 
     public int getQuantite(int index) {
-        if(quantite != null)
-            return quantite.get(index);
+        if(quantites != null)
+            return quantites.get(index);
 
         return 0;
     }
@@ -34,7 +34,7 @@ public class ValeurTablePrincipale {
         return nomConso;
     }
 
-    public void setQuantite(ArrayList<Integer> quantite) {
-        this.quantite = quantite;
+    public void setQuantites(ArrayList<Integer> quantites) {
+        this.quantites = quantites;
     }
 }

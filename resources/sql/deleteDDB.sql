@@ -4,7 +4,9 @@ DROP TABLE Compte_info;
 DROP TABLE Stock;
 DROP TABLE Compte;
 DROP TABLE Ingredient;
+DROP TABLE Stock_achats;
 DROP TABLE Produit;
+
 
 DROP SEQUENCE sequence_idCompte;
 

@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 public class MainApp extends Application {
 
-    public static Scene menu, nouveauCompte, compte, stocks, dialogStocks, dialogVenteCompte, modifConsos;
+    public static Scene menu, nouveauCompte, compte, stocks, dialogStocks, dialogVenteCompte, modifConsos, achats;
     public static ControleurMenu controleurMenu;
     public static ControleurCompte controleurCompte;
     public static ControleurStocks controleurStocks;
@@ -63,6 +63,10 @@ public class MainApp extends Application {
         fxmlLoader = new FXMLLoader(Paths.get("resources/fxml/ModifConsos.fxml").toUri().toURL());
         parent = fxmlLoader.load();
         modifConsos = new Scene(parent);
+
+        fxmlLoader = new FXMLLoader(Paths.get("resources/fxml/Achats.fxml").toUri().toURL());
+        parent = fxmlLoader.load();
+        achats = new Scene(parent);
 
         stage.setScene(menu);
 

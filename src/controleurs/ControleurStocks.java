@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import excelUtilities.ValeurTableStock;
+import utils.ValeurTableStock;
 import main.MainApp;
 
 import utils.DataBase;

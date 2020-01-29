@@ -5,8 +5,8 @@ import javafx.scene.Node;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import utils.ActionCompte;
-import excelUtilities.ValeurTableBottom;
-import excelUtilities.ValeurTablePrincipale;
+import utils.ValeurTableBottom;
+import utils.ValeurTablePrincipale;
 import items.Consommable;
 import items.TypeInformation;
 import javafx.application.Platform;
@@ -409,7 +409,7 @@ public class ControleurCompte{
                 for (int i = 1; i < nbColonnes; i++)
                     quantitesCourante.add(0);
 
-            listeProduit.setQuantite(quantitesCourante);
+            listeProduit.setQuantites(quantitesCourante);
         }
     }
 

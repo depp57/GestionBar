@@ -75,6 +75,15 @@ CREATE TABLE Compte_info (
     CONSTRAINT fk_compte_info FOREIGN KEY (idCompte) REFERENCES Compte(idCompte)
 );
 
+CREATE TABLE Stock_achats (
+    intituleProduit varchar(30),
+    dateAchat date,
+    quantite number(4),
+    prixUnite number(4,2),
+    CONSTRAINT pk_stock_achats PRIMARY KEY (intituleProduit, dateAchat),
+    CONSTRAINT fk_stock_achats FOREIGN KEY (intituleProduit) REFERENCES Produit(intituleProduit)
+);
+
 CREATE SEQUENCE sequence_idCompte;
 
 CREATE FUNCTION recupererDateAvant(p_idCompte number, p_date date) RETURN date
@@ -271,7 +280,7 @@ BEGIN
     DELETE FROM Compte WHERE idCompte = p_idCompte;
 END;
 
-CREATE PROCEDURE stock_acheter(p_intituleProduit varchar, p_quantite number, p_gratuit number)
+CREATE OR REPLACE PROCEDURE stock_acheter(p_intituleProduit varchar, p_quantite number, p_gratuit number)
 IS
     v_prix number(10,2);
     v_check number(1);
@@ -303,6 +312,25 @@ BEGIN
     END IF;
 
     UPDATE Stock_info SET totalAchat = totalAchat + v_prix;
+
+    --Partie pour historique des achats
+    enregisterAchat(p_intituleProduit, trunc(CURRENT_DATE), p_quantite, v_prix/p_quantite);
+END;
+
+CREATE OR REPLACE PROCEDURE enregisterAchat(p_intituleProduit varchar, p_date date, p_quantite number, p_prixUnit number)
+IS
+    v_check number(4);
+BEGIN
+    SELECT count(*) INTO v_check FROM Stock_achats
+        WHERE intituleProduit = p_intituleProduit AND dateAchat = p_date;
+
+    IF (v_check = 0) THEN
+        INSERT INTO Stock_achats VALUES (p_intituleProduit, p_date, p_quantite, p_prixUnit);
+    ELSE
+        UPDATE Stock_achats SET prixUnite = (quantite*prixUnite + p_prixUnit)/(quantite + p_quantite),
+                                quantite = quantite + p_quantite
+            WHERE intituleProduit = p_intituleProduit AND dateAchat = p_date;
+    END IF;
 END;
 
 CREATE FUNCTION stock_vendre(p_intituleProduit varchar, p_quantite number, p_gratuit number) RETURN number

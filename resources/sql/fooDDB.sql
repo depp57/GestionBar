@@ -195,15 +195,15 @@ IS
     v_produit varchar(30);
     v_idCompte number(4);
 BEGIN
-    FOR i IN 1..480 LOOP
+    FOR i IN 1..500 LOOP
         SELECT intituleProduit INTO v_produit FROM
             ( SELECT intituleProduit FROM Produit
             ORDER BY dbms_random.value )
             WHERE rownum = 1;
 
-        SELECT idCompte into v_idCompte FROM Compte WHERE idCompte = floor(dbms_random.value(1, 30));
+        --SELECT idCompte into v_idCompte FROM Compte WHERE idCompte = floor(dbms_random.value(1, 30));
 
-        COMPTE_ACHETER(v_idCompte, v_produit, 1, TRUNC(SYSDATE + DBMS_RANDOM.value(0,366)), 1);
+        COMPTE_ACHETER(1, v_produit, 1, TRUNC(SYSDATE + DBMS_RANDOM.value(0,366)), 1);
     end loop;
 end;
 

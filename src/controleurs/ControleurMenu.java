@@ -232,4 +232,10 @@ public class ControleurMenu {
         //Switch simplement de scene
         MainApp.stage.setScene(MainApp.stocks);
     }
+
+    @FXML
+    private void gererAchats() {
+        //Switch simplement de scene
+        MainApp.stage.setScene(MainApp.achats);
+    }
 }

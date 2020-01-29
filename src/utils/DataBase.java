@@ -356,24 +356,67 @@ public abstract class DataBase {
     }
 
     public static String[] compte_getAllDates(int idCompte, int dateAfficher) {
-        ArrayList<String> dates = new ArrayList<>();
         try {
-            Statement stmt = connection.createStatement();
+            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
 
             ResultSet rs = stmt.executeQuery("SELECT TO_CHAR(dateInfo, 'dd/mm/yyyy') FROM compte_info " +
                     "WHERE idCompte = " + idCompte + " AND EXTRACT(year FROM dateInfo) = " + dateAfficher +
                     " ORDER BY dateInfo");
 
+            String[] dates = new String[getNbLignes(rs)];
+            int i = 0;
             while (rs.next())
-                dates.add(rs.getString(1));
+                dates[i++] = (rs.getString(1));
 
             rs.close();
             stmt.close();
-        } catch (SQLException e) {
+
+            return dates;
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return dates.toArray(new String[0]);
+        return null;
+    }
+
+    public static String[] achats_getAllDates(int dateAfficher) {
+        try {
+            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+
+            ResultSet rs = stmt.executeQuery("SELECT TO_CHAR(dateAchat, 'dd/mm/yyyy') FROM Stock_achats " +
+                    "WHERE EXTRACT(year FROM dateAchat) = " + dateAfficher +
+                    " ORDER BY dateAchat");
+
+            String[] dates = new String[getNbLignes(rs)];
+            int i = 0;
+            while (rs.next())
+                dates[i++] = (rs.getString(1));
+
+            rs.close();
+            stmt.close();
+
+            return dates;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private static int getNbLignes(ResultSet rs) {
+        try {
+            rs.last();
+            int rows = rs.getRow();
+            rs.beforeFirst();
+            return rows;
+        }
+        catch (SQLException e) {
+            return 0;
+        }
     }
 
     public static String afficherException(SQLException exception) {
