@@ -1,5 +1,5 @@
-.list-cell{
-    -fx-font-size:25;
+.list-cell {
+    -fx-font-size:25px;
     -fx-font-family: monospace;
 }
 
@@ -10,4 +10,13 @@
 
 .list-view .scroll-bar:vertical {
     -fx-pref-width: 25px;
+}
+
+#listeAchats .list-cell {
+    -fx-font-size:20px;
+    -fx-pref-height: 37px;
+}
+
+#listeAchats .scroll-bar:vertical {
+    -fx-pref-width: 15px;
 }

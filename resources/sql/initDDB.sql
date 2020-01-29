@@ -14,8 +14,8 @@ CREATE TABLE Produit (
 CREATE TABLE Ingredient (
     intituleProduitPere varchar(30) PRIMARY KEY ,
     intituleProduitConsomme varchar(30),
-    CONSTRAINT fk_ingredient1 FOREIGN KEY (intituleProduitPere) REFERENCES Produit(intituleProduit),
-    CONSTRAINT fk_ingredient2 FOREIGN KEY (intituleProduitConsomme) REFERENCES Produit(intituleProduit)
+    CONSTRAINT fk_ingredient1 FOREIGN KEY (intituleProduitPere) REFERENCES Produit(intituleProduit) ON DELETE CASCADE,
+    CONSTRAINT fk_ingredient2 FOREIGN KEY (intituleProduitConsomme) REFERENCES Produit(intituleProduit) ON DELETE CASCADE
 );
 
 INSERT INTO Produit VALUES ('Becker pils', 0.49, 0.6, 'Boisson');
@@ -44,7 +44,7 @@ INSERT INTO Ingredient VALUES ('Picon', 'Becker pils');
 CREATE TABLE Stock (
     intituleProduit varchar(30) PRIMARY KEY,
     quantite number(4),
-    CONSTRAINT fk_stock FOREIGN KEY (intituleProduit) REFERENCES Produit(intituleProduit)
+    CONSTRAINT fk_stock FOREIGN KEY (intituleProduit) REFERENCES Produit(intituleProduit) ON DELETE CASCADE
 );
 
 CREATE TABLE Stock_info (
@@ -62,7 +62,7 @@ CREATE TABLE Compte_achats (
     quantite number(4),
     CONSTRAINT pk_compte_achats PRIMARY KEY (idCompte, dateAchat, intituleProduit),
     CONSTRAINT fk_compte_achats1 FOREIGN KEY (idCompte) REFERENCES Compte(idCompte),
-    CONSTRAINT fk_compte_achats2 FOREIGN KEY (intituleProduit) REFERENCES Produit(intituleProduit)
+    CONSTRAINT fk_compte_achats2 FOREIGN KEY (intituleProduit) REFERENCES Produit(intituleProduit) ON DELETE CASCADE
 );
 
 CREATE TABLE Compte_info (
@@ -72,7 +72,7 @@ CREATE TABLE Compte_info (
     moins number(10, 2),
     plus number(10, 2),
     CONSTRAINT pk_compte_info PRIMARY KEY (idCompte, dateInfo),
-    CONSTRAINT fk_compte_info FOREIGN KEY (idCompte) REFERENCES Compte(idCompte)
+    CONSTRAINT fk_compte_info FOREIGN KEY (idCompte) REFERENCES Compte(idCompte) ON DELETE CASCADE
 );
 
 CREATE TABLE Stock_achats (
@@ -81,7 +81,7 @@ CREATE TABLE Stock_achats (
     quantite number(4),
     prixUnite number(4,2),
     CONSTRAINT pk_stock_achats PRIMARY KEY (intituleProduit, dateAchat),
-    CONSTRAINT fk_stock_achats FOREIGN KEY (intituleProduit) REFERENCES Produit(intituleProduit)
+    CONSTRAINT fk_stock_achats FOREIGN KEY (intituleProduit) REFERENCES Produit(intituleProduit) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE sequence_idCompte;

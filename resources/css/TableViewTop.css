@@ -33,3 +33,8 @@
 .table-view .scroll-bar:horizontal .decrement-button {
     -fx-padding:0;
 }
+
+#tableAchats .table-column {
+    -fx-pref-width: 4cm;
+    -fx-alignment: CENTER;
+}

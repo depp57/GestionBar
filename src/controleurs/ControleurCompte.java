@@ -464,10 +464,10 @@ public class ControleurCompte{
         dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         Label label = new Label("   Montant : ");
         TextField textField = new TextField();
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*.?(\\d)*"))
-                Platform.runLater(textField::clear);
-        });
+        textField.setTextFormatter(new TextFormatter<>((change) -> {
+            if (!change.getText().matches("[0-9]|,") || textField.getText().length() > 4) change.setText("");
+            return change;
+        }));
         DatePicker datePicker = new DatePicker();
         datePicker.setValue(LocalDate.now());
 
@@ -533,7 +533,8 @@ public class ControleurCompte{
     @FXML
     private void raccourciDoubleClic(MouseEvent event) {
         if(event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2){
-            modifierValeur(dataTable.getSelectionModel().getSelectedItem().getConsommable());
+            if (dataTable.getSelectionModel().getSelectedItem() != null)
+                modifierValeur(dataTable.getSelectionModel().getSelectedItem().getConsommable());
         }
     }
 

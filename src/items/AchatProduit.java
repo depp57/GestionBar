@@ -18,4 +18,8 @@ public class AchatProduit {
     public void setPrixUnitaire(double prixUnitaire) {
         this.prixUnitaire = prixUnitaire;
     }
+
+    public String toString() {
+        return "Q : " + quantite + "   |   P : " + prixUnitaire + '€';
+    }
 }

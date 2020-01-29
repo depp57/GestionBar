@@ -98,7 +98,7 @@ public class ControleurModifConsos {
 
             Label labelNomProduit = new Label("   Nom du produit : ");
             TextField textNomProduit = new TextField(produit);
-            ControleurNouveauCompte.addUppercaseFormatter(textNomProduit);
+            ControleurNouveauCompte.addFormatter(textNomProduit);
 
             Label labelPrixAchat = new Label("   Prix d'achat : ");
             TextField textPrixAchat = new TextField(String.valueOf(conso.getPrixAchat()));
@@ -188,7 +188,7 @@ public class ControleurModifConsos {
 
         Label labelNomProduit = new Label("   Nom du produit : ");
         TextField textNomProduit = new TextField();
-        ControleurNouveauCompte.addUppercaseFormatter(textNomProduit);
+        ControleurNouveauCompte.addFormatter(textNomProduit);
 
         Label labelPrixAchat = new Label("   Prix d'achat : ");
         TextField textPrixAchat = new TextField();

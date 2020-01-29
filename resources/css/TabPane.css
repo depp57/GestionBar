@@ -1,0 +1,27 @@
+.tab {
+    -fx-pref-width: 320;
+    -fx-pref-height: 30;
+    -fx-background-color:  #F4A460;
+}
+
+.tab:hover {
+    -fx-opacity: 1;
+    -fx-background-color:  #d35400;
+}
+
+.tab:selected {
+    -fx-opacity: 1;
+    -fx-background-color:  #d35400;
+}
+
+.tab-pane>.tab-header-area>.tab-header-background {
+    -fx-background-color: #3498db;
+}
+
+
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+    -fx-alignment: CENTER;
+    -fx-pref-width: 320;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+}

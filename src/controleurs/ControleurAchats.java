@@ -1,20 +1,22 @@
 package controleurs;
 
+import items.AchatProduit;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import main.MainApp;
 import utils.DataBase;
 import utils.ValeurTableAchats;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class ControleurAchats {
-
-    @FXML
-    private Button retour;
 
     @FXML
     private TableView<ValeurTableAchats> dataTable;
@@ -22,22 +24,40 @@ public class ControleurAchats {
     @FXML
     private Spinner<Integer> periodeAffichage;
 
+    @FXML
+    private LineChart<String, Double> lineChart;
 
-    private void majDonnees() {
-        //On ajoute la liste des produits
-        ObservableList<ValeurTableAchats> donnees = getAchats();
-        dataTable.setItems(donnees);
-    }
+    @FXML
+    private Tab buttonGraph;
 
-    private ObservableList<ValeurTableAchats> getAchats() {
+    @FXML
+    private ListView<String> listeProduits;
+
+
+    private TableColumn<ValeurTableAchats, String>[] getDataColumn(int dateAafficher) {
         try {
             ArrayList<String> produits = DataBase.getProduits();
-            ObservableList<ValeurTableAchats> liste = FXCollections.observableArrayList();
 
-            for (String produitCourant : produits)
-                liste.add(new ValeurTableAchats(produitCourant, null));
+            ObservableList<ValeurTableAchats> donnees = FXCollections.observableArrayList();
 
-            return liste;
+            String[] dates = DataBase.achats_getAllDates(dateAafficher);
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            TableColumn<ValeurTableAchats, String>[] tableColumns = new TableColumn[dates.length];
+
+
+            for (String produitCourant : produits) {
+                AchatProduit[] valeurs = new AchatProduit[dates.length];
+                for (int i = 0; i < dates.length; i++) {
+                    tableColumns[i] = new TableColumn<>(dates[i]);
+                    tableColumns[i].setMinWidth(100);
+                    myCellFacto(tableColumns[i], i);
+                    valeurs[i] = DataBase.stock_getAchat(produitCourant, LocalDate.parse(dates[i], dateTimeFormatter));
+                }
+                donnees.add(new ValeurTableAchats(produitCourant, valeurs));
+            }
+
+            dataTable.setItems(donnees);
+            return tableColumns;
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -46,20 +66,27 @@ public class ControleurAchats {
         return null;
     }
 
-    private TableColumn<ValeurTableAchats, String>[] getDataColumn(int dateAafficher) {
-        String[] dates = DataBase.achats_getAllDates(dateAafficher);
-        TableColumn<ValeurTableAchats, String>[] tableColumns = new TableColumn[dates.length];
+    private void myCellFacto(TableColumn<ValeurTableAchats, String> tableColumn, int index) {
+        tableColumn.setCellFactory(param -> new TableCell<ValeurTableAchats, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
 
-        for(int i = 0; i < dates.length; i++) {
-            tableColumns[i] = new TableColumn<>(dates[i]);
-            tableColumns[i].setMinWidth(100);
-            //myCellFacto(tableColumns[i], i);
-        }
+                if (!empty) {
+                    int currentIndex = indexProperty()
+                            .getValue() < 0 ? 0
+                            : indexProperty().getValue();
+                    ValeurTableAchats valeurTableAchats = param
+                            .getTableView().getItems()
+                            .get(currentIndex);
 
-        return tableColumns;
+                    setText(String.valueOf(valeurTableAchats.getValeur(index) != null ? valeurTableAchats.getValeur(index) : 0));
+                }
+            }
+        });
     }
 
-    private TableColumn<ValeurTableAchats,?> getFirstColumn() {
+    private TableColumn<ValeurTableAchats, ?> getFirstColumn() {
         TableColumn<ValeurTableAchats, String> colonne = new TableColumn<>("Produit");
         colonne.setMinWidth(274);
 
@@ -77,8 +104,7 @@ public class ControleurAchats {
 
                     if (DataBase.getTypeProduit(valeurTableAchats.getNomProduit()).equals("Boisson")) {
                         setStyle("-fx-background-color: rgba(0,255,255,0.5)");
-                    }
-                    else {
+                    } else {
                         setStyle("-fx-background-color: rgba(222,184,135,0.51)");
                     }
                     setText(valeurTableAchats.getNomProduit());
@@ -95,9 +121,6 @@ public class ControleurAchats {
         dataTable.getColumns().add(getFirstColumn());
         //affiche seulement l'année choisie
         dataTable.getColumns().addAll(getDataColumn(annee));
-
-        //Et on ajoute les données
-        majDonnees();
     }
 
     ////////////////////////////////////////// FXML \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -127,5 +150,36 @@ public class ControleurAchats {
         //affiche seulement l'année choisie
         Integer annee = periodeAffichage.getValue();
         majDatesEtDonnees(annee);
+    }
+
+    @FXML
+    private void majLinechart() {
+        if(!buttonGraph.isSelected())
+            return;
+
+        try {
+            listeProduits.setItems(FXCollections.observableArrayList(DataBase.getProduits()));
+
+            XYChart.Series<String, Double> values = new XYChart.Series<>();
+            values.setName("Test");
+
+            values.getData().add(new XYChart.Data<>("Janvier", 1.0));
+            values.getData().add(new XYChart.Data<>("Février", 2.0));
+            values.getData().add(new XYChart.Data<>("Mars", 3.0));
+            values.getData().add(new XYChart.Data<>("Avril", 4.0));
+            values.getData().add(new XYChart.Data<>("Mai", 5.0));
+            values.getData().add(new XYChart.Data<>("Juin", 6.0));
+            values.getData().add(new XYChart.Data<>("Juillet", 7.0));
+            values.getData().add(new XYChart.Data<>("Août", 8.0));
+            values.getData().add(new XYChart.Data<>("Septembre", 9.0));
+            values.getData().add(new XYChart.Data<>("Octobre", 10.0));
+            values.getData().add(new XYChart.Data<>("Novembre", 11.0));
+            values.getData().add(new XYChart.Data<>("Décembre", 12.0));
+
+
+            lineChart.getData().add(values);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

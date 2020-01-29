@@ -24,16 +24,24 @@ public class ControleurNouveauCompte {
         annuler.setFocusTraversable(false);
         valider.setFocusTraversable(false);
 
-        addUppercaseFormatter(texteNom);
-        addUppercaseFormatter(textePrenom);
+        addFormatter(texteNom);
+        addFormatter(textePrenom);
     }
 
-    static void addUppercaseFormatter(TextField textField) {
+    static void addFormatter(TextField textField) {
         textField.setTextFormatter(new TextFormatter<>((change) -> {
-            if (change.getText().length() != 0 && textField.getText().length() == 0) {
-                StringBuilder sb = new StringBuilder(change.getText());
-                sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-                change.setText(sb.toString());
+            String txt = change.getText();
+            if (txt.length() != 0 ) {
+                //1 ere lettre en maj
+                if (textField.getText().length() == 0) {
+                    StringBuilder sb = new StringBuilder(txt);
+                    sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+                    change.setText(sb.toString());
+                }
+
+                //Pas d'espace
+                if (txt.contains(" ") || txt.contains("'") || txt.contains("\""))
+                    change.setText("");
             }
             return change;
         }));

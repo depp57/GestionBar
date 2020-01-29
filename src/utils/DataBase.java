@@ -1,7 +1,9 @@
 package utils;
 
+import items.AchatProduit;
 import items.Consommable;
 import items.TypeInformation;
+import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -64,6 +66,15 @@ public abstract class DataBase {
     }
 
     public static void compte_crediter(int idCompte, double valeur, LocalDate date) throws SQLException {
+        if (valeur < 0) {
+            Alert alerte = new Alert(Alert.AlertType.ERROR);
+            alerte.setTitle("Erreur crédit compte");
+            alerte.setContentText("Veuillez rentrer un montant positif");
+            alerte.setHeaderText(null);
+            alerte.show();
+            return;
+        }
+
         Date d = Date.valueOf(date);
 
         CallableStatement cStmt = connection.prepareCall("{call compte_crediter(?, ?, ?)}");
@@ -493,5 +504,30 @@ public abstract class DataBase {
         catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static AchatProduit stock_getAchat(String intituleProduit, LocalDate dateAchat) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT quantite, prixUnite FROM Stock_achats WHERE " +
+                    "intituleProduit = ? AND dateAchat = ?");
+
+            stmt.setString(1, intituleProduit);
+            stmt.setDate(2, Date.valueOf(dateAchat));
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int quantite = rs.getInt("quantite");
+                double prixUnite = rs.getDouble("prixUnite");
+
+                stmt.close();
+                return new AchatProduit(quantite, prixUnite);
+            }
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
     }
 }
