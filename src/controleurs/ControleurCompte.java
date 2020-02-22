@@ -1,21 +1,18 @@
 package controleurs;
 
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.input.*;
-import javafx.scene.layout.VBox;
-import utils.ActionCompte;
-import utils.ValeurTableBottom;
-import utils.ValeurTablePrincipale;
-import items.Consommable;
-import items.TypeInformation;
+import utils.*;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import main.MainApp;
 
 import java.sql.SQLException;
@@ -24,9 +21,8 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import utils.DataBase;
 
-public class ControleurCompte{
+public final class ControleurCompte{
 
     private int idCompte;
 
@@ -37,16 +33,17 @@ public class ControleurCompte{
     private Label labelProprietaireCompte;
 
     @FXML
-    private TableView<ValeurTablePrincipale> dataTable;
+    private TableView<String> dataTable;
 
     @FXML
-    private TableView<ValeurTableBottom> dataTableBottom;
+    private TableView<String> dataTableBottom;
 
     @FXML
     private Spinner<Integer> periodeAffichage;
 
     private Stack<ActionCompte> pileActions;
-
+    private CellulesCompte data;
+    private CellulesCompteB dataB;
 
     /**
      * Méthode principale appelée pour passer un compte au controleur.
@@ -62,13 +59,7 @@ public class ControleurCompte{
         this.pileActions = new Stack<>();
         labelProprietaireCompte.setText("Compte de " + prenom + " " + nom);
 
-        DataBase.clearDatesInutilesCompte(idCompte);
-        DataBase.compte_init(idCompte);
-
-        chargerDonnees();
-
         ajoutRaccourciClavier();
-
         ajoutFusionScrollBars();
 
         //Pour pouvoir sélectionner une seule cellule
@@ -76,6 +67,8 @@ public class ControleurCompte{
         dataTable.getSelectionModel().setCellSelectionEnabled(true);
 
         periodeAffichage.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2019, 2025, 2020));
+        enleverHeader(dataTableBottom);
+        chargerDonnees();
     }
 
     private void ajoutFusionScrollBars() {
@@ -111,29 +104,28 @@ public class ControleurCompte{
      */
     private void ajoutRaccourciClavier() {
         //CONTROLE Z
-        retour.getScene().addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+        retour.getScene().addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
             final KeyCombination keyComb = new KeyCodeCombination(KeyCode.Z,
                     KeyCombination.CONTROL_DOWN);
             public void handle(KeyEvent ke) {
                 if (keyComb.match(ke)) {
                     try {
                         reverse(pileActions.pop());
-                        Thread.sleep(300);
                     }
                     catch (Exception e) {
                         showAlerte(Alert.AlertType.INFORMATION, "Information", "Il n'y a plus d'actions à annuler !");
                     }
                 }
+                ke.consume();
             }
         });
     }
 
-    //TODO
     private void reverse(ActionCompte actionCompte) {
         switch (actionCompte.getAction()) {
             case CREDIT: {
                 try {
-                    double nouvelleValeur = DataBase.getInfoCompte(idCompte, actionCompte.getDate(), TypeInformation.PLUS) - actionCompte.getMontant();
+                    double nouvelleValeur = DataBase.getInfoCompte(idCompte, actionCompte.getDate().toString(), TypeInformation.PLUS) - actionCompte.getMontant();
                     DataBase.compte_setInfo(idCompte, actionCompte.getDate(), TypeInformation.PLUS, nouvelleValeur);
                 }
                 catch (SQLException e) {
@@ -144,13 +136,10 @@ public class ControleurCompte{
             case VENTE: {
                 try {
                     int quantite = actionCompte.getQuantite();
-                    Consommable consommable = actionCompte.getConsommable();
+                    String produit = actionCompte.getProduit();
 
-                    //TODO CHECK SI JUSTE
-                    DataBase.compte_acheter(idCompte, consommable.getNom(), -quantite, actionCompte.getDate(), actionCompte.isGratuit() ? 0 : 1);
+                    DataBase.compte_acheter(idCompte, produit, -quantite, actionCompte.getDate(), actionCompte.isGratuit() ? 0 : 1);
 
-
-                    //Cas spécial recette Picon.. TODO
                     MainApp.controleurStocks.majDonnees();
                 }
                 catch (SQLException e) {
@@ -159,146 +148,138 @@ public class ControleurCompte{
             }
         }
 
-        majDataTable();
+        chargerDonnees();
     }
 
 
     ////////////////////////////////////////// CHARGEMENT DES DONNÉES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+    @FXML
     private void chargerDonnees() {
-        chargerDonneesCentral();
-        chargerDonneesBottom();
+        getDatas(periodeAffichage.getValue());
     }
 
-    private void chargerDonneesCentral() {
-        //On vide la table
+    public final void addData(String date, String produit, int quantite, double moins, double plus) {
+        boolean dateExistante = dataB.updateLigne(date, moins, plus);
+        if (produit != null)
+            data.updateLigne(date, produit, quantite);
+        //Si la date n'existait pas avant il faut ajouter la colonne
+        if (!dateExistante) {
+            dataTableBottom.getColumns().add(creerColonneB(date));
+            dataTable.getColumns().add(creerColonne(date));
+
+            dataTable.getColumns().sort((c1, c2) -> {
+                final String d1 = c1.getText(), d2 = c2.getText();
+                if (d1.equals("Produit")) return -1;
+                else if (d2.equals("Produit")) return 1;
+                final String m1 = d1.substring(3, 5), m2 = d2.substring(3, 5);
+                return !m1.equals(m2) ? m1.compareTo(m2) : d1.compareTo(d2);
+            });
+            dataTableBottom.getColumns().sort((c1, c2) -> {
+                final String d1 = c1.getText(), d2 = c2.getText();
+                if (d1.equals("Produit")) return -1;
+                else if (d2.equals("Produit")) return 1;
+                final String m1 = d1.substring(3, 5), m2 = d2.substring(3, 5);
+                return !m1.equals(m2) ? m1.compareTo(m2) : d1.compareTo(d2);
+            });
+        }
+
+        dataTable.refresh();
+        dataTableBottom.refresh();
+    }
+
+    private void getDatas(int dateAafficher) {
+        //Chargement depuis la BDD
+        data = DataBase.getAchatsCompte(idCompte, dateAafficher);
+        dataB = DataBase.getInfosCompte(idCompte, dateAafficher);
+
         dataTable.getColumns().clear();
-
-        //On ajoute les colonnes
-        dataTable.getColumns().add(getFirstColumn());
-
-        //affiche seulement l'année choisie
-        Integer annee = periodeAffichage.getValue();
-        dataTable.getColumns().addAll(getDataColumns(annee != null ? annee : 2020));
-
-        //On ajoute la liste des produits
-        ObservableList<ValeurTablePrincipale> donnees = getProduits();
-        getDonnees(donnees);
-        dataTable.setItems(donnees);
-    }
-
-    private void chargerDonneesBottom() {
-        enleverHeader(dataTableBottom);
-
-        //On vide la table
         dataTableBottom.getColumns().clear();
-
-        //On ajoute les colonnes
-        dataTableBottom.getColumns().add(getFirstColumnBottom());
-        dataTableBottom.getColumns().addAll(getDataColumnsBottom());
-
-
-        //On ajoute les données
-        ObservableList<ValeurTableBottom> donnees = getInformationsBottom();
-        getDonneesBottom(donnees);
-        dataTableBottom.setItems(donnees);
-    }
-
-    //TODO
-    private void getDonneesBottom(ObservableList<ValeurTableBottom> donnees) {
         try {
-            int nbColonnes = dataTable.getColumns().size();
+            ArrayList<String> produits = DataBase.getProduits();
 
-            for (int i = 1; i < nbColonnes; i++) {
-
-                for (ValeurTableBottom valeurCourante : donnees) {
-                    TypeInformation typeInformation = valeurCourante.getTypeInformation();
-
-                    valeurCourante.add(DataBase.getInfoCompte(idCompte, getDateColonne(i), typeInformation));
-
+            //La première colonne (produits)
+            TableColumn<String, String> firstColonne = new TableColumn<>("Produit");
+            firstColonne.setMinWidth(150);
+            firstColonne.setCellValueFactory(value -> new SimpleStringProperty(value.getValue()));
+            firstColonne.setCellFactory(param -> new TableCell<String, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty) {
+                        if (DataBase.getTypeProduit(item).equals("Boisson"))
+                            setStyle("-fx-background-color: rgba(0,255,255,0.5)");
+                        else
+                            setStyle("-fx-background-color: rgba(222,184,135,0.51)");
+                        setText(item);
+                    }
                 }
-            }
+            });
+            dataTable.getColumns().add(firstColonne);
+
+            TableColumn<String, String> firstColonneB = new TableColumn<>("Produit");
+            firstColonneB.setMinWidth(150);
+            firstColonneB.setCellValueFactory(value -> new SimpleStringProperty(value.getValue()));
+            dataTableBottom.getColumns().add(firstColonneB);
+
+
+            //Les colonnes suivantes (dates)
+            ArrayList<TableColumn<String, String>> colonnes = new ArrayList<>();
+            dataB.getHashMap().forEach((date, useless) -> colonnes.add(creerColonne(date)));
+            dataTable.getColumns().addAll(colonnes);
+
+            ArrayList<TableColumn<String, Number>> colonnesB = new ArrayList<>();
+            dataB.getHashMap().forEach((date, useless) -> colonnesB.add(creerColonneB(date)));
+            dataTableBottom.getColumns().addAll(colonnesB);
+
+
+            //Et finalement les données..
+            final ObservableList<String> donnees = FXCollections.observableArrayList(produits);
+            dataTable.setItems(donnees);
+
+            final ObservableList<String> donneesB = FXCollections.observableArrayList("Reste", "Plus", "Moins", "Total");
+            dataTableBottom.setItems(donneesB);
         }
-        catch(SQLException e) {
-            e.printStackTrace();
-        }
+        catch (SQLException ignored) {ignored.printStackTrace();}
     }
 
-    private LocalDate getDateColonne(int index) {
-        ObservableList<TableColumn<ValeurTablePrincipale, ?>> listeColonnes = dataTable.getColumns();
-
-        TableColumn<ValeurTablePrincipale, ?> colonneCourante = listeColonnes.get(index);
-
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-
-        return LocalDate.parse(colonneCourante.getText(), dateTimeFormatter);
-    }
-
-    private ObservableList<ValeurTableBottom> getInformationsBottom() {
-        ObservableList<ValeurTableBottom> liste = FXCollections.observableArrayList();
-
-        for (TypeInformation typeInformation : TypeInformation.values())
-            liste.add(new ValeurTableBottom(typeInformation, new ArrayList<>()));
-
-        return liste;
-    }
-
-    private TableColumn<ValeurTableBottom, String>[] getDataColumnsBottom() {
-        TableColumn<ValeurTableBottom, String>[] tableColumns = new TableColumn[dataTable.getColumns().size() - 1];
-        int index = -1;
-
-        for (TableColumn<ValeurTablePrincipale, ?> currentColumn : dataTable.getColumns()) {
-            if (index == -1) {
-                index++;
-                continue;
-            }
-
-            String date = currentColumn.getText();
-            tableColumns[index] = new TableColumn<>();
-
-            if(date.equals("AUJOURD'HUI"))
-                tableColumns[index].getStyleClass().add("bold");
-
-            tableColumns[index].setMinWidth(100);
-            myCellFactoBottom(tableColumns[index], index);
-
-            index++;
-        }
-        return tableColumns;
-    }
-
-    private void myCellFactoBottom(TableColumn<ValeurTableBottom, String> tableColumn, int index) {
-        tableColumn.setCellFactory(param -> new TableCell<ValeurTableBottom, String>() {
+    private TableColumn<String, String> creerColonne(final String date) {
+        TableColumn<String, String> colonne = new TableColumn<>(date);
+        colonne.setMinWidth(100);
+        colonne.setCellValueFactory(value -> new SimpleStringProperty(Integer.toString(data.getCellule(date, value.getValue()))));
+        colonne.setCellFactory(column -> new TableCell<String, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (!empty) {
-                    int currentIndex = indexProperty()
-                            .getValue() < 0 ? 0
-                            : indexProperty().getValue();
-                    ValeurTableBottom valeurTableBottom = param
-                            .getTableView().getItems()
-                            .get(currentIndex);
-
-                    if (valeurTableBottom.getTypeInformation() == TypeInformation.TOTAL &&
-                            Double.parseDouble(valeurTableBottom.getMontant(index).split("€")[0]) < 0)
-                        setStyle("-fx-background-color: red");
-
-                    setText(valeurTableBottom.getMontant(index));
+                    setTooltip(new Tooltip(getTableView().getItems().get(getIndex())));
+                    setText(item);
                 }
             }
         });
-    }
-
-    private TableColumn<ValeurTableBottom, String> getFirstColumnBottom() {
-        TableColumn<ValeurTableBottom, String> colonne = new TableColumn<>("");
-        colonne.setMinWidth(150);
-        colonne.setCellValueFactory(new PropertyValueFactory<>("texte"));
         return colonne;
     }
 
-    private void enleverHeader(TableView<ValeurTableBottom> tableView) {
+    private TableColumn<String, Number> creerColonneB(final String date) {
+        TableColumn<String, Number> colonne = new TableColumn<>(date);
+        colonne.setMinWidth(100);
+        colonne.setCellValueFactory(value -> new SimpleDoubleProperty(dataB.getCellule(date, value.getValue())));
+        colonne.setCellFactory(column -> new TableCell<String, Number>() {
+            @Override
+            protected void updateItem(Number item, boolean empty) {
+                super.updateItem(item, empty);
+                if (!empty) {
+                    setTooltip(new Tooltip(getTableView().getItems().get(getIndex())));
+                    setText(item.toString());
+                    if(item.doubleValue() < 0)
+                        setStyle("-fx-background-color:lightcoral");
+                }
+            }
+        });
+        return colonne;
+    }
+
+    private void enleverHeader(TableView<String> tableView) {
         Pane header = (Pane) tableView.lookup("TableHeaderRow");
         header.setMaxHeight(0);
         header.setMinHeight(0);
@@ -306,141 +287,39 @@ public class ControleurCompte{
         header.setVisible(false);
     }
 
-    private TableColumn<ValeurTablePrincipale, String> getFirstColumn() {
-        TableColumn<ValeurTablePrincipale, String> colonne = new TableColumn<>("");
-        colonne.setMinWidth(150);
-
-        colonne.setCellFactory(param -> new TableCell<ValeurTablePrincipale, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (!empty) {
-                    int currentIndex = indexProperty()
-                            .getValue() < 0 ? 0
-                            : indexProperty().getValue();
-                    ValeurTablePrincipale valeurTablePrincipale = param
-                            .getTableView().getItems()
-                            .get(currentIndex);
-
-                    if (valeurTablePrincipale.getConsommable().getCategorie().equals(Consommable.Categorie.BOISSON)) {
-                        setStyle("-fx-background-color: rgba(0,255,255,0.5)");
-                    }
-                    else {
-                        setStyle("-fx-background-color: rgba(222,184,135,0.51)");
-                    }
-                    setText(valeurTablePrincipale.getNomConso());
-                }
-            }
-        });
-        return colonne;
+    private int valCelluleSelectionnee() {
+        TablePosition<String, String> pos = dataTable.getSelectionModel().getSelectedCells().get(0);
+        String item = dataTable.getItems().get(pos.getRow());
+        return Integer.parseInt(pos.getTableColumn().getCellObservableValue(item).getValue());
     }
-
-    private TableColumn<ValeurTablePrincipale, Integer>[] getDataColumns(int dateAffiche) {
-        String[] dates = DataBase.compte_getAllDates(idCompte, dateAffiche);
-        TableColumn<ValeurTablePrincipale, Integer>[] tableColumns = new TableColumn[dates.length];
-
-
-        for(int i = 0; i < dates.length; i++) {
-            tableColumns[i] = new TableColumn<>(dates[i]);
-            tableColumns[i].setMinWidth(100);
-            myCellFacto(tableColumns[i], i);
-        }
-
-        return tableColumns;
-    }
-
-    private void myCellFacto(TableColumn<ValeurTablePrincipale, Integer> tableColumn, int index) {
-        tableColumn.setCellFactory(param -> new TableCell<ValeurTablePrincipale, Integer>() {
-            @Override
-            protected void updateItem(Integer item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (!empty) {
-                    int currentIndex = indexProperty()
-                            .getValue() < 0 ? 0
-                            : indexProperty().getValue();
-                    ValeurTablePrincipale valeurTablePrincipale = param
-                            .getTableView().getItems()
-                            .get(currentIndex);
-
-                    setText(String.valueOf(valeurTablePrincipale.getQuantite(index)));
-                }
-            }
-        });
-    }
-
-    //DONE
-    private ObservableList<ValeurTablePrincipale> getProduits() {
-        ObservableList<ValeurTablePrincipale> liste = FXCollections.observableArrayList();
-
-        try {
-            ArrayList<String> produits = DataBase.getProduits();
-
-            for(String produitCourant : produits)
-                liste.add(new ValeurTablePrincipale(DataBase.getProduit(produitCourant), null));
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return liste;
-    }
-
-
-    //TODO CHANGER l'id
-    private void getDonnees(ObservableList<ValeurTablePrincipale> listeProduits) {
-        for (ValeurTablePrincipale listeProduit : listeProduits) {
-            Consommable nomProduit = listeProduit.getConsommable();
-
-            int nbColonnes = dataTable.getColumns().size();
-            ArrayList<Integer> quantitesCourante = new ArrayList<>(nbColonnes);
-
-            //Cas normaux où le client a acheté au moins 1 fois le produit
-            if (DataBase.aAcheteProduit(idCompte, nomProduit.getNom())) {
-                try {
-                    for (int i = 1; i < nbColonnes; i++)
-                        quantitesCourante.add(DataBase.getAchatCompte(idCompte, getDateColonne(i), nomProduit.getNom()));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            //Cas où le client n'a jamais acheté le produit
-            else
-                for (int i = 1; i < nbColonnes; i++)
-                    quantitesCourante.add(0);
-
-            listeProduit.setQuantites(quantitesCourante);
-        }
-    }
-
-
 
     ////////////////////////////////////////// MODIFICATION DES VALEURS (UTILISATEUR) \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-    private void modifierValeur(Consommable consommable) {
+    private void modifierValeur(String produit) {
         final ObservableList<TablePosition> selectedCells = dataTable.getSelectionModel().getSelectedCells();
         final int idColonne = selectedCells.get(0).getColumn();
 
         if (idColonne > 0 ) {
-            final int quantite = dataTable.getSelectionModel().getSelectedItem().getQuantite(idColonne-1);
+            final int quantite = valCelluleSelectionnee();
             String date = dataTable.getColumns().get(idColonne).getText();
 
             if (quantite != 0)
-                MainApp.controleurDialogVenteCompte.modifierVenteUtilisateur(MainApp.stage, consommable, quantite, date);
+                MainApp.controleurDialogVenteCompte.modifierVenteUtilisateur(MainApp.stage, produit, quantite, date);
             else
-                MainApp.controleurDialogVenteCompte.demanderVenteUtilisateur(MainApp.stage, consommable, date);
+                MainApp.controleurDialogVenteCompte.demanderVenteUtilisateur(MainApp.stage, produit, date);
         }
         else
-            MainApp.controleurDialogVenteCompte.demanderVenteUtilisateur(MainApp.stage, consommable, LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            MainApp.controleurDialogVenteCompte.demanderVenteUtilisateur(MainApp.stage, produit, LocalDate.now().format(DateTimeFormatter.ofPattern(MainApp.datePattern)));
     }
 
-    void acheter(Consommable consommable, LocalDate date, int quantite, boolean gratuit) {
+    void acheter(String produit, LocalDate date, int quantite, boolean gratuit) {
         try {
-            DataBase.compte_acheter(idCompte, consommable.getNom(), quantite, date, gratuit ? 0 : 1);
+            DataBase.compte_acheter(idCompte, produit, quantite, date, gratuit ? 0 : 1);
 
-            pileActions.add(new ActionCompte(ActionCompte.Actions.VENTE, consommable, date, quantite, gratuit));
+            pileActions.add(new ActionCompte(ActionCompte.Actions.VENTE, produit, date, quantite, gratuit));
 
-            majDataTable();
+            double moins = gratuit ? 0 : DataBase.getPrixProduit(produit)*quantite;
+            addData(date.format(DateTimeFormatter.ofPattern(MainApp.datePattern)), produit, quantite, moins, 0);
             MainApp.controleurStocks.majDonnees();
         }
         catch (SQLException exceptionStock) {
@@ -448,10 +327,12 @@ public class ControleurCompte{
         }
     }
 
-    void modifierAchat(Consommable consommable, LocalDate date, int quantite) {
-        DataBase.compte_modifierAchat(idCompte, consommable.getNom(), date, quantite);
-
-        majDataTable();
+    void modifierAchat(String produit, LocalDate date, int quantite) {
+        DataBase.compte_modifierAchat(idCompte, produit, date, quantite);
+        final String dateS = date.format(DateTimeFormatter.ofPattern(MainApp.datePattern));
+        final int oldQuantite = data.getCellule(dateS, produit);
+        final double moins = DataBase.getPrixProduit(produit) * (quantite - oldQuantite);
+        addData(dateS, produit, quantite, moins, 0);
         MainApp.controleurStocks.majDonnees();
     }
 
@@ -464,7 +345,7 @@ public class ControleurCompte{
         dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         Label label = new Label("   Montant : ");
         TextField textField = new TextField();
-        textField.setTextFormatter(new TextFormatter<>((change) -> {
+        textField.setTextFormatter(new TextFormatter<>(change -> {
             if (!change.getText().matches("[0-9]|,") || textField.getText().length() > 4) change.setText("");
             return change;
         }));
@@ -493,30 +374,30 @@ public class ControleurCompte{
         return optionalResults.orElse(null);
     }
 
-    private void majDataTable() {
-        chargerDonnees();
+    private void supprimerAchat() {
+        //Récupère la date et le nom du produit
+        final ObservableList<TablePosition> selectedCells = dataTable.getSelectionModel().getSelectedCells();
+        final int idColonne = selectedCells.get(0).getColumn();
+        final String date = dataTable.getColumns().get(idColonne).getText();
+        final String produit = dataTable.getSelectionModel().getSelectedItem();
 
-        //Table principale
-        ObservableList<ValeurTablePrincipale> donnees = dataTable.getItems();
-        getDonnees(donnees);
-        dataTable.setItems(donnees);
-        dataTable.refresh();
+        final Alert alerte = new Alert(Alert.AlertType.CONFIRMATION);
+        alerte.setTitle("Supprimer");
+        alerte.setContentText("Etes vous sûr de vouloir supprimer l'achat de : " + produit +
+                " le " + date + " ?");
+        alerte.setHeaderText(null);
+        final Optional<ButtonType> option = alerte.showAndWait();
 
-        //Table bottom
-        ObservableList<ValeurTableBottom> donneesBottom = dataTableBottom.getItems();
-        getDonneesBottom(donneesBottom);
-        dataTableBottom.setItems(donneesBottom);
-        dataTableBottom.refresh();
+        if(option.isPresent() && option.get() == ButtonType.OK)
+            DataBase.compte_modifierAchat(idCompte, produit, LocalDate.parse(date, DateTimeFormatter.ofPattern(MainApp.datePattern)), 0);
+
+        final int oldQuantite = data.getCellule(date, produit);
+        final double moins = DataBase.getPrixProduit(produit) * (-oldQuantite);
+        addData(date, produit, 0, moins, 0);
+        MainApp.controleurStocks.majDonnees();
     }
-
-
 
     ////////////////////////////////////////// FXML \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-    @FXML
-    private void modifierPeriodeAffichage() {
-        chargerDonnees();
-    }
 
     @FXML
     private void retourArriere() {
@@ -526,16 +407,19 @@ public class ControleurCompte{
 
     @FXML
     private void raccourciClavierListePresse(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ENTER))
-            modifierValeur(dataTable.getSelectionModel().getSelectedItem().getConsommable());
+        if (dataTable.getSelectionModel().getSelectedItem() != null) {
+            if (event.getCode().equals(KeyCode.ENTER))
+                modifierValeur(dataTable.getSelectionModel().getSelectedItems().get(0));
+            else if (event.getCode().equals(KeyCode.BACK_SPACE))
+                supprimerAchat();
+        }
     }
 
     @FXML
     private void raccourciDoubleClic(MouseEvent event) {
-        if(event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2){
-            if (dataTable.getSelectionModel().getSelectedItem() != null)
-                modifierValeur(dataTable.getSelectionModel().getSelectedItem().getConsommable());
-        }
+        if(event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2
+                && dataTable.getSelectionModel().getSelectedItem() != null)
+            modifierValeur(dataTable.getSelectionModel().getSelectedItems().get(0));
     }
 
     //Done
@@ -551,16 +435,16 @@ public class ControleurCompte{
 
             pileActions.add(new ActionCompte(ActionCompte.Actions.CREDIT, entrees.date, entrees.valeur));
 
-            majDataTable();
+            addData(entrees.date.format(DateTimeFormatter.ofPattern(MainApp.datePattern)), null, 0, 0, entrees.valeur);
         }
         catch (SQLException e) {
             showAlerte(Alert.AlertType.ERROR, "Erreur", "Veuillez entrer une date valide");
         }
     }
+
 }
 
-
-class Results {
+final class Results {
 
     double valeur;
     LocalDate date;

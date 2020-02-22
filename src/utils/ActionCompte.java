@@ -1,13 +1,11 @@
 package utils;
 
-import items.Consommable;
-
 import java.time.LocalDate;
 
-public class ActionCompte {
+public final class ActionCompte {
 
     private Actions action;
-    private Consommable consommable;
+    private String produit;
     private LocalDate date;
     private int quantite;
     private double montant;
@@ -18,9 +16,9 @@ public class ActionCompte {
         CREDIT
     }
 
-    public ActionCompte(Actions action, Consommable consommable, LocalDate date, int quantite, boolean gratuit) {
+    public ActionCompte(Actions action, String produit, LocalDate date, int quantite, boolean gratuit) {
         this.action = action;
-        this.consommable = consommable;
+        this.produit = produit;
         this.date = date;
         this.quantite = quantite;
         this.gratuit = gratuit;
@@ -36,8 +34,8 @@ public class ActionCompte {
         return action;
     }
 
-    public Consommable getConsommable() {
-        return consommable;
+    public String getProduit() {
+        return produit;
     }
 
     public LocalDate getDate() {

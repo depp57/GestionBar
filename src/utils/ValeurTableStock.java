@@ -1,10 +1,10 @@
 package utils;
 
-public class ValeurTableStock {
+public final class ValeurTableStock {
 
     private final String nomProduit;
 
-    private int quantite;
+    private final int quantite;
 
     public ValeurTableStock(String nomProduit, int quantite) {
         this.quantite = quantite;

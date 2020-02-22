@@ -13,7 +13,7 @@ import utils.DataBase;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ControleurStocks {
+public final class ControleurStocks {
 
     @FXML
     private TableView<ValeurTableStock> tableStocks;
@@ -31,7 +31,7 @@ public class ControleurStocks {
     private MenuButton acheter, vendre;
 
     @FXML
-    public void initialize() {
+    public final void initialize() {
         chargerDonnees();
     }
 
@@ -81,7 +81,7 @@ public class ControleurStocks {
         }
     }
 
-    void majDonnees() {
+    final void majDonnees() {
         //On ajoute la liste des produits
         ObservableList<ValeurTableStock> donnees = getProduits();
         tableStocks.setItems(donnees);
@@ -94,8 +94,9 @@ public class ControleurStocks {
 
     private void majLabels() {
         try {
-            double totalAchat = DataBase.getTotalAchatStock();
-            double totalVente = DataBase.getTotalVenteStock();
+            final double[] totaux = DataBase.getTotauxStock();
+            double totalAchat = totaux[0];
+            double totalVente = totaux[1];
 
             labelAchat.setText("Total achat : " + totalAchat + '€');
             labelVente.setText("Total vente : " + totalVente + '€');
@@ -175,12 +176,10 @@ public class ControleurStocks {
                             .getTableView().getItems()
                             .get(currentIndex);
 
-                    if (DataBase.getTypeProduit(valeurTableStock.getNomProduit()).equals("Boisson")) {
+                    if (DataBase.getTypeProduit(valeurTableStock.getNomProduit()).equals("Boisson"))
                         setStyle("-fx-background-color: rgba(0,255,255,0.5)");
-                    }
-                    else {
+                    else
                         setStyle("-fx-background-color: rgba(222,184,135,0.51)");
-                    }
                     setText(valeurTableStock.getNomProduit());
                 }
             }
@@ -202,10 +201,7 @@ public class ControleurStocks {
         controleur.demanderNombreUtilisateur(MainApp.stage, produit, false);
     }
 
-    /**
-     * TODO CHECK LES SQL EXCEPTIONS !
-     */
-    void acheter(String nomProduit, int quantite, boolean gratuit) {
+   final void acheter(String nomProduit, int quantite, boolean gratuit) {
         int grat = (gratuit) ? 0 : 1;
         try {
             DataBase.stock_acheter(nomProduit, quantite, grat);
@@ -216,8 +212,7 @@ public class ControleurStocks {
         }
     }
 
-    //TODO SAME
-    void vendre(String nomProduit, int quantite, boolean gratuit) throws ExceptionStock{
+    final void vendre(String nomProduit, int quantite, boolean gratuit) throws ExceptionStock{
         int grat = (gratuit) ? 0 : 1;
         try {
             DataBase.stock_vendre(nomProduit, quantite, grat);
@@ -240,7 +235,7 @@ public class ControleurStocks {
         }
     }
 
-    static class ExceptionStock extends Throwable {
+    final static class ExceptionStock extends Throwable {
         ExceptionStock(String message) {
             super(message);
         }

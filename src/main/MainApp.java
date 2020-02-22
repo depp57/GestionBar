@@ -3,22 +3,24 @@ package main;
 import controleurs.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utils.DataBase;
 
-import java.nio.file.Paths;
+public final class MainApp extends Application {
 
-public class MainApp extends Application {
-
-    public static Scene menu, nouveauCompte, compte, stocks, dialogStocks, dialogVenteCompte, modifConsos, achats;
+    public static Scene menu, nouveauCompte, compte, stocks, dialogStocks, dialogVenteCompte, modifConsos, achats, dialogAchats;
     public static ControleurMenu controleurMenu;
     public static ControleurCompte controleurCompte;
     public static ControleurStocks controleurStocks;
     public static ControleurDialogStocks controleurDialogStocks;
     public static ControleurDialogVenteCompte controleurDialogVenteCompte;
+    public static ControleurDialogAchats controleurDialogAchats;
+    public static ControleurAchats controleurAchats;
     public static Stage stage;
+
+    //Constante pour les dates
+    public static final String datePattern = "dd/MM/yyyy";
 
     public static void main(String[] args) {
         launch(args);
@@ -27,51 +29,46 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
-
         //Connecte à la base de donnée
         DataBase.openConnection();
 
         //charge les fichiers
-        FXMLLoader fxmlLoader = new FXMLLoader(Paths.get("resources/fxml/Menu.fxml").toUri().toURL());
-        Parent parent = fxmlLoader.load();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Menu.fxml"));
+        menu = new Scene(fxmlLoader.load());
         controleurMenu = fxmlLoader.getController();
-        menu = new Scene(parent);
 
-        parent = FXMLLoader.load(Paths.get("resources/fxml/NouveauCompte.fxml").toUri().toURL());
-        nouveauCompte = new Scene(parent);
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NouveauCompte.fxml"));
+        nouveauCompte = new Scene(fxmlLoader.load());
 
-        fxmlLoader = new FXMLLoader(Paths.get("resources/fxml/Compte.fxml").toUri().toURL());
-        parent = fxmlLoader.load();
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Compte.fxml"));
+        compte = new Scene(fxmlLoader.load());
         controleurCompte = fxmlLoader.getController();
-        compte = new Scene(parent);
 
-        fxmlLoader = new FXMLLoader(Paths.get("resources/fxml/Stocks.fxml").toUri().toURL());
-        parent = fxmlLoader.load();
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Stocks.fxml"));
+        stocks = new Scene(fxmlLoader.load());
         controleurStocks = fxmlLoader.getController();
-        stocks = new Scene(parent);
 
-        fxmlLoader = new FXMLLoader(Paths.get("resources/fxml/DialogStocks.fxml").toUri().toURL());
-        parent = fxmlLoader.load();
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/DialogStocks.fxml"));
+        dialogStocks = new Scene(fxmlLoader.load());
         controleurDialogStocks = fxmlLoader.getController();
-        dialogStocks = new Scene(parent);
 
-        fxmlLoader = new FXMLLoader(Paths.get("resources/fxml/DialogVenteCompte.fxml").toUri().toURL());
-        parent = fxmlLoader.load();
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/DialogVenteCompte.fxml"));
+        dialogVenteCompte = new Scene(fxmlLoader.load());
         controleurDialogVenteCompte = fxmlLoader.getController();
-        dialogVenteCompte = new Scene(parent);
 
-        fxmlLoader = new FXMLLoader(Paths.get("resources/fxml/ModifConsos.fxml").toUri().toURL());
-        parent = fxmlLoader.load();
-        modifConsos = new Scene(parent);
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModifConsos.fxml"));
+        modifConsos = new Scene(fxmlLoader.load());
 
-        fxmlLoader = new FXMLLoader(Paths.get("resources/fxml/Achats.fxml").toUri().toURL());
-        parent = fxmlLoader.load();
-        achats = new Scene(parent);
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Achats.fxml"));
+        achats = new Scene(fxmlLoader.load());
+        controleurAchats = fxmlLoader.getController();
+
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/DialogAchats.fxml"));
+        dialogAchats = new Scene(fxmlLoader.load());
+        controleurDialogAchats = fxmlLoader.getController();
 
         stage.setScene(menu);
-
         stage.show();
-
         stage.setMaximized(true);
     }
 }

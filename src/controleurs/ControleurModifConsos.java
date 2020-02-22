@@ -8,7 +8,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import items.Consommable;
+import utils.Consommable;
 import main.MainApp;
 import utils.DataBase;
 
@@ -19,7 +19,7 @@ import java.util.*;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
-public class ControleurModifConsos {
+public final class ControleurModifConsos {
 
     @FXML
     private ListView<String> listeConsos;
@@ -31,7 +31,7 @@ public class ControleurModifConsos {
     }
 
     @FXML
-    public void initialize() {
+    public final void initialize() {
         initialiserListeConsos();
     }
 
@@ -98,7 +98,7 @@ public class ControleurModifConsos {
 
             Label labelNomProduit = new Label("   Nom du produit : ");
             TextField textNomProduit = new TextField(produit);
-            ControleurNouveauCompte.addFormatter(textNomProduit);
+            ControleurNouveauCompte.addFormatter(textNomProduit, true);
 
             Label labelPrixAchat = new Label("   Prix d'achat : ");
             TextField textPrixAchat = new TextField(String.valueOf(conso.getPrixAchat()));
@@ -142,7 +142,6 @@ public class ControleurModifConsos {
                         textPrixAchat.setText(textPrixAchat.getText().replace('.', ','));
                         textPrixVente.setText(textPrixVente.getText().replace('.', ','));
 
-                        //TODO RECETTE NULL !
                         return new Consommable(textNomProduit.getText(), format.parse(textPrixAchat.getText()).doubleValue(),
                                 format.parse(textPrixVente.getText()).doubleValue(), ingredient, categorie);
 
@@ -188,7 +187,7 @@ public class ControleurModifConsos {
 
         Label labelNomProduit = new Label("   Nom du produit : ");
         TextField textNomProduit = new TextField();
-        ControleurNouveauCompte.addFormatter(textNomProduit);
+        ControleurNouveauCompte.addFormatter(textNomProduit, true);
 
         Label labelPrixAchat = new Label("   Prix d'achat : ");
         TextField textPrixAchat = new TextField();
@@ -219,11 +218,12 @@ public class ControleurModifConsos {
         dialog.setResultConverter((ButtonType button) -> {
             if (button == ButtonType.OK) {
                 try {
-                    String categorie = choiceBoxTypeProduit.getValue();
-                    String ingredient = !choiceBoxIngredients.getValue().equals("Aucun") ? choiceBoxIngredients.getValue() : null;
+                    String categorie = choiceBoxTypeProduit.getValue() != null ? choiceBoxTypeProduit.getValue() : "Boisson";
+                    String ingredient = !(choiceBoxIngredients.getValue() == null ||
+                            choiceBoxIngredients.getValue().equals("Aucun")) ? choiceBoxIngredients.getValue() : null;
 
                     return new Consommable(textNomProduit.getText(), format.parse(textPrixAchat.getText()).doubleValue(),
-                            format.parse(textPrixVente.getText()).doubleValue(),ingredient, categorie);
+                            format.parse(textPrixVente.getText()).doubleValue(), ingredient, categorie);
 
                 }
                 catch (ParseException e) {

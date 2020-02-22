@@ -11,7 +11,7 @@ import utils.DataBase;
 
 import java.sql.SQLException;
 
-public class ControleurNouveauCompte {
+public final class ControleurNouveauCompte {
 
     @FXML
     private Button annuler, valider;
@@ -24,12 +24,12 @@ public class ControleurNouveauCompte {
         annuler.setFocusTraversable(false);
         valider.setFocusTraversable(false);
 
-        addFormatter(texteNom);
-        addFormatter(textePrenom);
+        addFormatter(texteNom, false);
+        addFormatter(textePrenom, false);
     }
 
-    static void addFormatter(TextField textField) {
-        textField.setTextFormatter(new TextFormatter<>((change) -> {
+    static void addFormatter(TextField textField, boolean espace) {
+        textField.setTextFormatter(new TextFormatter<>(change -> {
             String txt = change.getText();
             if (txt.length() != 0 ) {
                 //1 ere lettre en maj
@@ -40,6 +40,8 @@ public class ControleurNouveauCompte {
                 }
 
                 //Pas d'espace
+                if (espace)
+                    return change;
                 if (txt.contains(" ") || txt.contains("'") || txt.contains("\""))
                     change.setText("");
             }
@@ -48,7 +50,7 @@ public class ControleurNouveauCompte {
     }
 
     @FXML
-    public void retourArriere() {
+    public final void retourArriere() {
         //Switch simplement de scene
         MainApp.stage.setScene(MainApp.menu);
 

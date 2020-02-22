@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.MainApp;
 
-public class ControleurDialogStocks {
+public final class ControleurDialogStocks {
 
     @FXML
     private CheckBox gratuit;
@@ -24,7 +24,7 @@ public class ControleurDialogStocks {
     private boolean achat;
 
 
-    void demanderNombreUtilisateur(Stage stage, String nomProduit, boolean achat) {
+    final void demanderNombreUtilisateur(Stage stage, String nomProduit, boolean achat) {
         this.nomProduit = nomProduit;
         this.achat = achat;
 

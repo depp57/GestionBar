@@ -3,13 +3,13 @@ package controleurs;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import items.Consommable;
 import main.MainApp;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 
-public class ControleurDialogVenteCompte {
+public final class ControleurDialogVenteCompte {
 
     @FXML
     private TextField textField;
@@ -23,36 +23,36 @@ public class ControleurDialogVenteCompte {
     @FXML
     private CheckBox gratuit;
 
-    private Consommable consommable;
+    private String produit;
 
     private boolean modeModification;
 
-    void demanderVenteUtilisateur(Stage stage, Consommable consommable, String date) {
+    final void demanderVenteUtilisateur(Stage stage, String produit, String date) {
         modeModification = false;
-        this.consommable = consommable;
+        this.produit = produit;
         gratuit.setSelected(false);
-        datePicker.setValue(LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        datePicker.setValue(LocalDate.parse(date, DateTimeFormatter.ofPattern(MainApp.datePattern)));
         textField.requestFocus();
 
         //Car le mode modification désactive ces 2 composants
         gratuit.setDisable(false);
         datePicker.setDisable(false);
 
-        labelQuestion.setText("Combien de " + consommable.getNom() + " voulez-vous vendre ?");
+        labelQuestion.setText("Combien de " + produit + " voulez-vous vendre ?");
         initTextField();
         switchScene(stage);
     }
 
-    void modifierVenteUtilisateur(Stage stage, Consommable consommable, int quantite, String date) {
+    final void modifierVenteUtilisateur(Stage stage, String produit, int quantite, String date) {
         modeModification = true;
-        this.consommable = consommable;
+        this.produit = produit;
         gratuit.setDisable(true);
 
         textField.setText(String.valueOf(quantite));
-        datePicker.setValue(LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        datePicker.setValue(LocalDate.parse(date, DateTimeFormatter.ofPattern(MainApp.datePattern)));
         datePicker.setDisable(true);
 
-        labelQuestion.setText("Modifier la quantité de " + consommable.getNom() + " vendue le " + date);
+        labelQuestion.setText("Modifier la quantité de " + produit + " vendue le " + date);
         initTextField();
         switchScene(stage);
     }
@@ -79,11 +79,10 @@ public class ControleurDialogVenteCompte {
     @FXML
     private void valider() {
         try {
-            if (modeModification) {
-                MainApp.controleurCompte.modifierAchat(consommable, datePicker.getValue(), Integer.parseInt(textField.getText()));
-            }
+            if (modeModification)
+                MainApp.controleurCompte.modifierAchat(produit, datePicker.getValue(), Integer.parseInt(textField.getText()));
             else
-                MainApp.controleurCompte.acheter(consommable, datePicker.getValue(), Integer.parseInt(textField.getText()), gratuit.isSelected());
+                MainApp.controleurCompte.acheter(produit, datePicker.getValue(), Integer.parseInt(textField.getText()), gratuit.isSelected());
         }
         catch (Exception e) {
             Alert alerte = new Alert(Alert.AlertType.ERROR);

@@ -16,7 +16,7 @@ import utils.DataBase;
 import java.sql.SQLException;
 import java.util.*;
 
-public class ControleurMenu {
+public final class ControleurMenu {
 
     @FXML
     private Button flecheNom, flechePrenom;
@@ -24,7 +24,7 @@ public class ControleurMenu {
     @FXML
     private ListView<String> listeComptes;
 
-    public void initialize() {
+    public final void initialize() {
         initialiserTri();
         Platform.runLater(()->listeComptes.requestFocus());
     }
@@ -78,7 +78,7 @@ public class ControleurMenu {
         Comparator<? super String> comparateur = null;
 
         switch (sensTri) {
-            case NOM_CROISSANT :  comparateur = (Comparator<String>) String::compareTo; break;
+            case NOM_CROISSANT :  comparateur = String::compareTo; break;
             case NOM_DECROISSANT : comparateur = Comparator.reverseOrder(); break;
             case PRENOM_CROISSANT : comparateur = (Comparator<String>) (chaine1, chaine2) -> {
                 //On récupère que le nom de la chaine
@@ -100,7 +100,7 @@ public class ControleurMenu {
         afficherComptes(FXCollections.observableArrayList(comptes));
     }
 
-    void afficherComptes(ObservableList<String> comptes) {
+    final void afficherComptes(ObservableList<String> comptes) {
         listeComptes.setItems(comptes);
         listeComptes.refresh();
     }
@@ -109,7 +109,7 @@ public class ControleurMenu {
      * Retourne une liste contenant le nom et prénom de tous les comptes.
      * @return ArrayList contenant le nom et prénom de tous les comptes.
      */
-    ArrayList<String> getIdentitesComptes() {
+    final ArrayList<String> getIdentitesComptes() {
         ArrayList<String> comptes = new ArrayList<>();
 
         try {
