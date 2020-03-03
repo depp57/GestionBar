@@ -39,10 +39,7 @@ public final class ControleurNouveauCompte {
                     change.setText(sb.toString());
                 }
 
-                //Pas d'espace
-                if (espace)
-                    return change;
-                if (txt.contains(" ") || txt.contains("'") || txt.contains("\""))
+                if (!txt.matches("[a-zA-Z0-9-_.,à-é]"))
                     change.setText("");
             }
             return change;

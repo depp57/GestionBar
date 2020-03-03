@@ -193,17 +193,11 @@ public abstract class DataBase {
         return comptes;
     }
 
-    public static double getInfoCompte(int idCompte,String date, TypeInformation typeInfo) throws SQLException {
-        final PreparedStatement pstmt = connection.prepareStatement("SELECT ? FROM Compte_info WHERE IdCompte = ? AND TO_CHAR(dateInfo, 'dd/mm/yyyy') = ?");
+    public static double getInfoCompte(int idCompte,LocalDate date) throws SQLException {
+        final PreparedStatement pstmt = connection.prepareStatement("SELECT plus FROM Compte_info WHERE IdCompte = ? AND dateInfo = ?");
 
-        if (typeInfo != TypeInformation.TOTAL)
-            pstmt.setString(1, typeInfo.getNom());
-
-        else
-            pstmt.setString(1, "reste + plus - moins");
-
-        pstmt.setInt(2, idCompte);
-        pstmt.setString(3, date);
+        pstmt.setInt(1, idCompte);
+        pstmt.setDate(2, Date.valueOf(date));
 
         final ResultSet rs = pstmt.executeQuery();
 
@@ -301,11 +295,10 @@ public abstract class DataBase {
         return new Consommable(produit, prixAchat, prixVente, recette, typeProduit);
     }
 
-    public static void compte_setInfo(int idCompte, LocalDate date, TypeInformation typeInfo, double nouvelleValeur) throws SQLException {
+    public static void compte_setInfo(int idCompte, LocalDate date, double nouvelleValeur) throws SQLException {
         final Statement stmt = connection.createStatement();
-        final String type = typeInfo.getNom();
 
-        stmt.executeUpdate("UPDATE compte_info SET " + type + " = " +
+        stmt.executeUpdate("UPDATE compte_info SET Plus = " +
                 nouvelleValeur + " WHERE idCompte = " + idCompte + " AND dateInfo = TO_DATE('" + Date.valueOf(date) + "', 'YYYY-MM-DD')");
 
         stmt.close();

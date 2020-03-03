@@ -69,9 +69,9 @@ public final class ControleurAchats {
 
             //La première colonne (produits)
             TableColumn<String, String> firstColonne = new TableColumn<>("Produit");
-            firstColonne.setMinWidth(274);
             firstColonne.setCellValueFactory(value -> new SimpleStringProperty(value.getValue()));
             dataTable.getColumns().add(firstColonne);
+            firstColonne.setStyle("-fx-pref-width: 180px");
 
             //Les colonnes suivantes (dates)
             ArrayList<TableColumn<String, String>> colonnes = new ArrayList<>();
@@ -94,10 +94,12 @@ public final class ControleurAchats {
             TableColumn<String, Number> quantite = new TableColumn<>("Quantité");
             quantite.setCellValueFactory(value -> new SimpleIntegerProperty(data.getQuantite(date, value.getValue())));
             quantite.setResizable(false);
+            afficherToolTip(quantite);
 
             TableColumn<String, Number> prix = new TableColumn<>("PrixUnité (€)");
             prix.setCellValueFactory(value -> new SimpleFloatProperty(data.getPrixUnite(date, value.getValue())));
             prix.setResizable(false);
+            afficherToolTip(prix);
 
             colonne.getColumns().clear();
             colonne.getColumns().addAll(quantite, prix);
@@ -106,6 +108,19 @@ public final class ControleurAchats {
             colonne.setCellValueFactory(value -> new SimpleStringProperty(data.getQuantiteEtPrix(date, value.getValue())));
 
         return colonne;
+    }
+
+    private void afficherToolTip(TableColumn<String, Number> colonne) {
+        colonne.setCellFactory(column -> new TableCell<String, Number>() {
+            @Override
+            protected void updateItem(Number item, boolean empty) {
+                super.updateItem(item, empty);
+                if (!empty) {
+                    setTooltip(new Tooltip(getTableView().getItems().get(getIndex())));
+                    setText(item.toString());
+                }
+            }
+        });
     }
 
     public final void majDatesEtDonnees(int annee) {

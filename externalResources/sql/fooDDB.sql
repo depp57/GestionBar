@@ -223,5 +223,3 @@ END;
 
 call test_graphique();
 commit;
-
-select * from COMPTE;

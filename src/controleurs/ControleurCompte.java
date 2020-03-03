@@ -125,8 +125,8 @@ public final class ControleurCompte{
         switch (actionCompte.getAction()) {
             case CREDIT: {
                 try {
-                    double nouvelleValeur = DataBase.getInfoCompte(idCompte, actionCompte.getDate().toString(), TypeInformation.PLUS) - actionCompte.getMontant();
-                    DataBase.compte_setInfo(idCompte, actionCompte.getDate(), TypeInformation.PLUS, nouvelleValeur);
+                    double nouvelleValeur = DataBase.getInfoCompte(idCompte, actionCompte.getDate()) - actionCompte.getMontant();
+                    DataBase.compte_setInfo(idCompte, actionCompte.getDate(), nouvelleValeur);
                 }
                 catch (SQLException e) {
                     e.printStackTrace();
