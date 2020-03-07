@@ -17,8 +17,10 @@ public final class CellulesAchat {
             return !m1.equals(m2) ? m1.compareTo(m2) : d1.compareTo(d2);
         });
 
-        if (LocalDate.now().getYear() == dateAafficher)
-            hashMap.put(LocalDate.now().format(DateTimeFormatter.ofPattern(MainApp.datePattern)), new HashMap<>());
+        LocalDate today = LocalDate.now();
+        if (today.getYear() != dateAafficher) //Si c'est pas l'année courante qu'on veut afficher, affiche le 01/01/X
+            today = LocalDate.ofYearDay(dateAafficher, 1);
+        hashMap.put(today.format(DateTimeFormatter.ofPattern(MainApp.datePattern)), new HashMap<>());
     }
 
     public final void addLigne(String date, String produit, int quantite, float prixUnite) {

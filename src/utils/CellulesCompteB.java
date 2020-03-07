@@ -19,8 +19,10 @@ public final class CellulesCompteB {
         });
         ancienTotal = 0F;
 
-        if (LocalDate.now().getYear() == dateAafficher)
-            hashMap.put(LocalDate.now().format(DateTimeFormatter.ofPattern(MainApp.datePattern)), new CelluleCompteB(0, 0, 0));
+        LocalDate today = LocalDate.now();
+        if (today.getYear() != dateAafficher) //Si c'est pas l'année courante qu'on veut afficher, affiche le 01/01/X
+            today = LocalDate.ofYearDay(dateAafficher, 1);
+        hashMap.put(today.format(DateTimeFormatter.ofPattern(MainApp.datePattern)), new CelluleCompteB(0, 0, 0));
     }
 
     public final TreeMap<String, CelluleCompteB> getHashMap() {

@@ -23,6 +23,9 @@ public final class ControleurDialogVenteCompte {
     @FXML
     private CheckBox gratuit;
 
+    @FXML
+    private Button valider;
+
     private String produit;
 
     private boolean modeModification;
@@ -40,6 +43,8 @@ public final class ControleurDialogVenteCompte {
 
         labelQuestion.setText("Combien de " + produit + " voulez-vous vendre ?");
         initTextField();
+
+        valider.setDefaultButton(true);
         switchScene(stage);
     }
 
