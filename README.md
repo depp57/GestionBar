@@ -1,6 +1,6 @@
 ﻿# GestionBar
 
-Logiciel de gestion de bar pour la caserne de pompier à Rouhling.
+Logiciel de gestion de bar (stock et comptes clients avec historique des achats) pour la caserne de pompier à Rouhling.
 
 Créé par *Sacha Thommet*.
 
@@ -14,17 +14,16 @@ Créé par *Sacha Thommet*.
   * [x] ControleurNouveauCompte
   * [x] ControleurStocks
 
-* [ ] Todolist de Kévin
+* [x] Todolist de Kévin
   * [x] Clavier numérique
   * [x] Défile les 2 JTables ensemble
   * [x] produit consommé de base AUCUN
   * [x] Plein écran
   * [x] Modifier les quantité produits mis à une date dans les fiches personnelles
-  * [ ] Nouvelle page chaque année
-  * [ ] Nouveau bouton gestion achat VOIR FEUILLE
-  * [ ] Faire que y'a toujours le libelle des produits à gauche dans les comptes
+  * [x] Nouvelle page chaque année
+  * [x] Nouveau bouton gestion achat VOIR FEUILLE
+  * [x] Faire que y'a toujours le libelle des produits à gauche dans les comptes
 
-* [ ] Optimisations
-  * [ ] Supprimer code inutile
-  * [ ] opti le code
-  * [ ] javadoc
+* [x] Optimisations
+  * [x] Supprimer code inutile
+  * [x] opti le code
