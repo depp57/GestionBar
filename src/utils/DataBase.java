@@ -17,7 +17,7 @@ public abstract class DataBase {
      */
     public static void openConnection() {
         try {
-            connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "Depp");
+            connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "kevin2000");
             connection.setAutoCommit(true);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,20 +94,20 @@ public abstract class DataBase {
     }
 
     /**
-     * 0 pour gratuit, 1 pour non gratuit
+     * 0 pour gratuit, 1 pour payant (JDBC ne comprend pas les booleéns !)
      */
     public static void stock_acheter(String intituleProduit, int quantite, int gratuit) throws SQLException {
-        final CallableStatement cStmt = connection.prepareCall("{call stock_acheter(?, ?, ?)}");
+        final CallableStatement cStmt = connection.prepareCall("{call enregisterAchat(?, ?, ?)}");
         cStmt.setString(1, intituleProduit);
         cStmt.setInt(2, quantite);
-        cStmt.setInt(3, gratuit);
+        cStmt.setInt(3, -gratuit);
 
         cStmt.execute();
         cStmt.close();
     }
 
     /**
-     * 0 pour gratuit, 1 pour non gratuit
+     * 0 pour gratuit, 1 pour payant (JDBC ne comprend pas les booleéns !)
      */
     public static void stock_vendre(String intituleProduit, int quantite, int gratuit) throws SQLException {
         final CallableStatement cStmt = connection.prepareCall("{? = call stock_vendre(?, ?, ?)}");
@@ -122,7 +122,7 @@ public abstract class DataBase {
     }
 
     /**
-     * 0 pour gratuit, 1 pour non gratuit
+     * 0 pour gratuit, 1 pour payant
      */
     public static void compte_acheter(int idCompte, String intituleProduit,
                                       int quantite, LocalDate date, int gratuit) throws SQLException {
@@ -143,9 +143,9 @@ public abstract class DataBase {
         try {
             final CallableStatement cStmt = connection.prepareCall("{call ENREGISTERACHAT(?, ?, ?, ?)}");
             cStmt.setString(1, produit);
-            cStmt.setDate(2, date);
-            cStmt.setInt(3, quantite);
-            cStmt.setDouble(4, prixUnit);
+            cStmt.setInt(2, quantite);
+            cStmt.setDouble(3, prixUnit);
+            cStmt.setDate(4, date);
 
             cStmt.execute();
             cStmt.close();

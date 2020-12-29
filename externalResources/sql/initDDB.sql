@@ -242,9 +242,8 @@ BEGIN
     DELETE FROM Compte WHERE idCompte = p_idCompte;
 END;
 
-CREATE PROCEDURE stock_acheter(p_intituleProduit varchar, p_quantite number, p_gratuit number)
+CREATE OR REPLACE PROCEDURE stock_acheter(p_intituleProduit varchar, p_quantite number, p_prix number)
 IS
-    v_prix number(10,2);
     v_check number(1);
     e_produitInexistant exception;
     e_quantiteNegative exception;
@@ -267,29 +266,35 @@ BEGIN
        UPDATE Stock SET quantite = quantite + p_quantite WHERE p_intituleProduit = intituleProduit;
     END IF;
 
-    IF (p_gratuit = 0) THEN
-        v_prix := 0;
-    ELSE
-        SELECT prixAchat * p_quantite INTO v_prix FROM Produit WHERE intituleProduit = p_intituleProduit;
-    END IF;
-
-    UPDATE Stock_info SET totalAchat = totalAchat + v_prix;
+    UPDATE Stock_info SET totalAchat = totalAchat + p_prix;
 END;
 
-CREATE OR REPLACE PROCEDURE enregisterAchat(p_intituleProduit varchar, p_date date, p_quantite number, p_prixUnit number)
+CREATE OR REPLACE PROCEDURE enregisterAchat(p_intituleProduit varchar, p_quantite number, p_prixUnit number, p_date date DEFAULT CURRENT_DATE)
 IS
-    v_check number(4);
+    v_check   number(4);
+    v_date    date;
+    v_prixUnit number;
 BEGIN
+    v_date := TRUNC(p_date);
+
+    IF(p_prixUnit = -1) THEN
+        SELECT prixAchat INTO v_prixUnit FROM Produit WHERE intituleProduit = p_intituleProduit;
+    ELSE
+        v_prixUnit := p_prixUnit;
+    END IF;
+
     SELECT count(*) INTO v_check FROM Stock_achats
-        WHERE intituleProduit = p_intituleProduit AND dateAchat = p_date;
+        WHERE intituleProduit = p_intituleProduit AND dateAchat = v_date;
 
     IF (v_check = 0) THEN
-        INSERT INTO Stock_achats VALUES (p_intituleProduit, p_date, p_quantite, p_prixUnit);
+        INSERT INTO Stock_achats VALUES (p_intituleProduit, v_date, p_quantite, v_prixUnit);
     ELSE
-        UPDATE Stock_achats SET prixUnite = (quantite*prixUnite + p_prixUnit*p_quantite)/(quantite + p_quantite),
+        UPDATE Stock_achats SET prixUnite = (quantite*prixUnite + v_prixUnit*p_quantite)/(quantite + p_quantite),
                                 quantite = quantite + p_quantite
-            WHERE intituleProduit = p_intituleProduit AND dateAchat = p_date;
+            WHERE intituleProduit = p_intituleProduit AND dateAchat = v_date;
     END IF;
+
+    stock_acheter(p_intituleProduit, p_quantite, v_prixUnit*p_quantite);
 END;
 
 CREATE FUNCTION stock_vendre(p_intituleProduit varchar, p_quantite number, p_gratuit number) RETURN number

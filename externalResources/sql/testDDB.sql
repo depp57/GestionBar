@@ -8,10 +8,10 @@
 
 BEGIN
     compte_creer('Thommet', 'Sacha');
-    produit_inserer('Bière', 0.50, 0.82, 'Aperitif');
-    compte_supprimer('Thommet', 'Sacha');
-    compte_creer('Thommet', 'Sacha');
-    compte_crediter('Thommet', 'Sacha', 10, current_date);
+    produit_inserer('Bière', 0.50, 0.82, 'Aperitif', null);
+    --compte_supprimer('Thommet', 'Sacha');
+    --compte_creer('Thommet', 'Sacha');
+    --compte_crediter('Thommet', 'Sacha', 10, current_date);
 END;
 
 select * from Produit;

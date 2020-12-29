@@ -116,7 +116,7 @@ public final class ControleurModifConsos {
             else
                 choiceBoxTypeProduit.setValue("Apéritif");
 
-            Label labelingredient = new Label("   Produit consommé (picon etc)");
+            Label labelingredient = new Label("   Produit consommé (picon ect)");
             ChoiceBox<String> choiceBoxIngredients = new ChoiceBox<>();
             choiceBoxIngredients.getItems().add("Aucun");
             try {
@@ -200,7 +200,7 @@ public final class ControleurModifConsos {
         choiceBoxTypeProduit.getItems().add("Apéritif");
         choiceBoxTypeProduit.getItems().add("Boisson");
 
-        Label labelingredient = new Label("   Produit consommé (picon etc)");
+        Label labelingredient = new Label("   Produit consommé (picon ect)");
         ChoiceBox<String> choiceBoxIngredients = new ChoiceBox<>();
         choiceBoxIngredients.getItems().add("Aucun");
         try {

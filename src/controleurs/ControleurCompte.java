@@ -1,5 +1,8 @@
 package controleurs;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import utils.*;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -105,16 +108,21 @@ public final class ControleurCompte{
     private void ajoutRaccourciClavier() {
         //CONTROLE Z
         retour.getScene().addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            boolean delay = false;
             final KeyCombination keyComb = new KeyCodeCombination(KeyCode.Z,
                     KeyCombination.CONTROL_DOWN);
             public void handle(KeyEvent ke) {
-                if (keyComb.match(ke)) {
+                if (keyComb.match(ke) && !delay) {
+                    delay = true;
                     try {
                         reverse(pileActions.pop());
                     }
                     catch (Exception e) {
                         showAlerte(Alert.AlertType.INFORMATION, "Information", "Il n'y a plus d'actions à annuler !");
                     }
+                    final KeyFrame kf = new KeyFrame(Duration.millis(300), e -> delay = false);
+                    final Timeline timeline = new Timeline(kf);
+                    Platform.runLater(timeline::play);
                 }
                 ke.consume();
             }
