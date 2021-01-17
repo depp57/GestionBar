@@ -60,6 +60,38 @@ BEGIN
     compte_acheter('Gauthier', 'Mayer', 'Eau', 5, TO_DATE('04/10/2019'));
 END;
 
+CREATE OR REPLACE PROCEDURE test
+    IS
+    x date;
 BEGIN
-    dbms_output.put_line(recupererDateApres(4, TO_DATE('01/10/2019')));
+    FOR i in 1..1000 loop
+            x := RECUPERERDATEAPRES(2, TO_DATE('17/10/2019'));
+        end loop;
+    dbms_output.put_line(x);
+END;
+
+CREATE OR REPLACE PROCEDURE test2
+IS
+    x date;
+BEGIN
+    FOR i in 1..1000 loop
+        x := RECUPERERDATEAVANT(2, TO_DATE('17/10/2019'));
+    end loop;
+    dbms_output.put_line(x);
+END;
+
+BEGIN
+    test();
 end;
+
+BEGIN
+    test2();
+end;
+
+DROP PROCEDURE test;
+DROP PROCEDURE test2;
+
+select * from compte_info WHERE 2 = idCompte;
+
+SELECT TO_CHAR(dateInfo, 'dd/MM/yyyy'), reste, moins, plus  FROM COMPTE_INFO
+                     WHERE idCompte = ? AND EXTRACT(year FROM dateInfo) = ? ORDER BY dateInfo;

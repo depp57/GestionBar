@@ -492,10 +492,35 @@ public abstract class DataBase {
         return valeurs;
     }
 
+    public static double getReste(int idCompte, String date) {
+        double reste = 0;
+        try {
+            final PreparedStatement pstmt = connection.prepareStatement("SELECT reste FROM COMPTE_INFO" +
+                    " WHERE idCompte = ? AND TRUNC(dateInfo, 'DDD') = TRUNC(?, 'DDD')");
+
+            pstmt.setInt(1, idCompte);
+            pstmt.setDate(2, Date.valueOf(LocalDate.parse(date, DateTimeFormatter.ofPattern(MainApp.datePattern))));
+
+            final ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next())
+                reste = rs.getDouble(1);
+
+            rs.close();
+            pstmt.close();
+
+            return reste;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reste;
+    }
+
     public static CellulesCompteB getInfosCompte(int idCompte, int dateAafficher) {
         final CellulesCompteB valeurs = new CellulesCompteB(dateAafficher);
         try {
-            final PreparedStatement pstmt = connection.prepareStatement("SELECT TO_CHAR(dateInfo, 'dd/MM/yyyy'), moins, plus  FROM COMPTE_INFO" +
+            final PreparedStatement pstmt = connection.prepareStatement("SELECT TO_CHAR(dateInfo, 'dd/MM/yyyy'), reste, moins, plus  FROM COMPTE_INFO" +
                     " WHERE idCompte = ? AND EXTRACT(year FROM dateInfo) = ? ORDER BY dateInfo");
 
             pstmt.setInt(1, idCompte);
@@ -504,7 +529,8 @@ public abstract class DataBase {
             final ResultSet rs = pstmt.executeQuery();
 
             while(rs.next())
-                valeurs.addLigne(rs.getString(1), rs.getDouble(2), rs.getDouble(3));
+                valeurs.addLigne(rs.getString(1), rs.getDouble(2),
+                        rs.getDouble(3), rs.getDouble(4));
 
             rs.close();
             pstmt.close();

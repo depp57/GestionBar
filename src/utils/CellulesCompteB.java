@@ -2,6 +2,7 @@ package utils;
 
 import main.MainApp;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.TreeMap;
@@ -10,14 +11,11 @@ public final class CellulesCompteB {
 
     private final TreeMap<String, CelluleCompteB> hashMap;
 
-    private double ancienTotal;
-
     public CellulesCompteB(int dateAafficher) {
         hashMap = new TreeMap<>((d1, d2) -> {
             final String m1 = d1.substring(3, 5), m2 = d2.substring(3, 5);
             return !m1.equals(m2) ? m1.compareTo(m2) : d1.compareTo(d2);
         });
-        ancienTotal = 0F;
 
         LocalDate today = LocalDate.now();
         if (today.getYear() != dateAafficher) //Si c'est pas l'année courante qu'on veut afficher, affiche le 01/01/X
@@ -42,16 +40,14 @@ public final class CellulesCompteB {
         return 0F;
     }
 
-    public final void addLigne(String date, double moins, double plus) {
-        final double reste = ancienTotal;
-        ancienTotal = Math.round((ancienTotal + plus-moins) * Math.pow(10, 2)) / Math.pow(10, 2);
+    public final void addLigne(String date, double reste, double moins, double plus) {
         hashMap.put(date, new CelluleCompteB(reste, moins, plus));
     }
 
-    public final boolean updateLigne(String date, double moins, double plus) {
+    public final boolean updateLigne(int idCompte, String date, double moins, double plus) {
         final boolean containsKey = hashMap.containsKey(date);
         if (!containsKey)
-            addLigne(date, moins, plus);
+            addLigne(date, DataBase.getReste(idCompte, date), moins, plus);
         else {
             CelluleCompteB cell = hashMap.get(date);
             cell.moins += moins;

@@ -61,50 +61,31 @@ CREATE TABLE Stock_achats (
 
 CREATE SEQUENCE sequence_idCompte;
 
-CREATE FUNCTION recupererDateAvant(p_idCompte number, p_date date) RETURN date
+CREATE OR REPLACE FUNCTION recupererDateAvant(p_idCompte number, p_date date) RETURN date
 IS
     v_dateAvant date;
-    v_delta number;
-    v_minDelta number;
-    CURSOR curseur_Compte_info IS SELECT dateInfo FROM compte_info WHERE p_idCompte = idCompte;
 BEGIN
-    v_minDelta := 999999;
-    v_dateAvant := NULL;
-
-    FOR dateCourante IN curseur_Compte_info LOOP
-        v_delta := (p_date - dateCourante.dateInfo);
-
-        IF (v_delta > 0 AND v_delta < v_minDelta) THEN
-            v_minDelta := v_delta;
-            v_dateAvant := dateCourante.dateInfo;
-        END IF;
-    END LOOP ;
+    SELECT dateInfo into v_dateAvant FROM Compte_info WHERE p_idCompte = idCompte and dateInfo < p_date and ROWNUM = 1
+        ORDER BY dateInfo DESC;
 
     RETURN v_dateAvant;
+EXCEPTION
+    WHEN no_data_found THEN RETURN NULL;
 END;
 
-CREATE FUNCTION recupererDateApres(p_idCompte number, p_date date) RETURN date
-IS
+CREATE OR REPLACE FUNCTION recupererDateApres(p_idCompte number, p_date date) RETURN date
+    IS
     v_dateApres date;
-    v_delta number;
-    v_minDelta number;
-    CURSOR curseur_Compte_info IS SELECT dateInfo FROM compte_info WHERE p_idCompte = idCompte;
 BEGIN
-    v_minDelta := 999999;
-    v_dateApres := NULL;
-
-    FOR dateCourante IN curseur_Compte_info LOOP
-        v_delta := dateCourante.dateInfo - p_date;
-        IF (v_delta > 0 AND v_delta < v_minDelta) THEN
-            v_minDelta := v_delta;
-            v_dateApres := dateCourante.dateInfo;
-        END IF;
-    END LOOP ;
+    SELECT dateInfo into v_dateApres FROM Compte_info WHERE p_idCompte = idCompte and dateInfo > p_date and ROWNUM = 1
+    ORDER BY dateInfo;
 
     RETURN v_dateApres;
+EXCEPTION
+    WHEN no_data_found THEN RETURN NULL;
 END;
 
-CREATE PROCEDURE maj_info_compte(p_idCompte number, p_date date)
+CREATE OR REPLACE PROCEDURE maj_info_compte(p_idCompte number, p_date date)
 IS
     v_dateSuivante date;
     v_total number(10, 2);
@@ -113,7 +94,7 @@ BEGIN
         v_dateSuivante := recupererDateApres(p_idCompte, p_date);
         IF (v_dateSuivante IS NOT NULL) THEN
             SELECT reste + plus - moins INTO v_total FROM Compte_info
-            WHERE TO_CHAR(p_date, 'DD/MM/YY') = TO_CHAR(dateInfo, 'DD/MM/YY') AND idCompte = p_idCompte;
+            WHERE TRUNC(p_date, 'DDD') = TRUNC(dateInfo, 'DDD') AND idCompte = p_idCompte;
 
             UPDATE Compte_info SET reste = v_total WHERE dateInfo = v_dateSuivante AND idCompte = p_idCompte;
             maj_info_compte(p_idCompte, v_dateSuivante);

@@ -168,7 +168,7 @@ public final class ControleurCompte{
     }
 
     public final void addData(String date, String produit, int quantite, double moins, double plus) {
-        boolean dateExistante = dataB.updateLigne(date, moins, plus);
+        boolean dateExistante = dataB.updateLigne(idCompte, date, moins, plus);
         if (produit != null)
             data.updateLigne(date, produit, quantite);
         //Si la date n'existait pas avant il faut ajouter la colonne
