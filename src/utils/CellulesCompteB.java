@@ -11,16 +11,11 @@ public final class CellulesCompteB {
 
     private final TreeMap<String, CelluleCompteB> hashMap;
 
-    public CellulesCompteB(int dateAafficher) {
+    public CellulesCompteB() {
         hashMap = new TreeMap<>((d1, d2) -> {
             final String m1 = d1.substring(3, 5), m2 = d2.substring(3, 5);
             return !m1.equals(m2) ? m1.compareTo(m2) : d1.compareTo(d2);
         });
-
-        LocalDate today = LocalDate.now();
-        if (today.getYear() != dateAafficher) //Si c'est pas l'année courante qu'on veut afficher, affiche le 01/01/X
-            today = LocalDate.ofYearDay(dateAafficher, 1);
-        hashMap.put(today.format(DateTimeFormatter.ofPattern(MainApp.datePattern)), new CelluleCompteB(0, 0, 0));
     }
 
     public final TreeMap<String, CelluleCompteB> getHashMap() {
@@ -54,6 +49,15 @@ public final class CellulesCompteB {
             cell.plus += plus;
         }
         return containsKey;
+    }
+
+    public void addFirstColIfEmpty(int anneeDonnees) {
+        if (hashMap.isEmpty()) {
+            LocalDate today = LocalDate.now();
+            if (today.getYear() != anneeDonnees) //Si c'est pas l'année courante qu'on veut afficher, affiche le 01/01/X
+                today = LocalDate.ofYearDay(anneeDonnees, 1);
+            hashMap.put(today.format(DateTimeFormatter.ofPattern(MainApp.datePattern)), new CelluleCompteB(0, 0, 0));
+        }
     }
 
     public static class CelluleCompteB {

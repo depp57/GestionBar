@@ -518,7 +518,7 @@ public abstract class DataBase {
     }
 
     public static CellulesCompteB getInfosCompte(int idCompte, int dateAafficher) {
-        final CellulesCompteB valeurs = new CellulesCompteB(dateAafficher);
+        final CellulesCompteB valeurs = new CellulesCompteB();
         try {
             final PreparedStatement pstmt = connection.prepareStatement("SELECT TO_CHAR(dateInfo, 'dd/MM/yyyy'), reste, moins, plus  FROM COMPTE_INFO" +
                     " WHERE idCompte = ? AND EXTRACT(year FROM dateInfo) = ? ORDER BY dateInfo");
@@ -531,6 +531,8 @@ public abstract class DataBase {
             while(rs.next())
                 valeurs.addLigne(rs.getString(1), rs.getDouble(2),
                         rs.getDouble(3), rs.getDouble(4));
+
+            valeurs.addFirstColIfEmpty(dateAafficher);
 
             rs.close();
             pstmt.close();
